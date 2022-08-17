@@ -1,0 +1,56 @@
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('MWCore'), require('Events')) :
+    typeof define === 'function' && define.amd ? define(['exports', 'MWCore', 'Events'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["mw-game"] = {}, global.MWCore, global.Events));
+})(this, (function (exports, MWCore, Events) { 'use strict';
+
+    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+    var MWCore__default = /*#__PURE__*/_interopDefaultLegacy(MWCore);
+    var Events__default = /*#__PURE__*/_interopDefaultLegacy(Events);
+
+    var __defProp = Object.defineProperty;
+    var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+    var __decorateClass = (decorators, target, key, kind) => {
+      var result = kind > 1 ? void 0 : kind ? __getOwnPropDesc(target, key) : target;
+      for (var i = decorators.length - 1, decorator; i >= 0; i--)
+        if (decorator = decorators[i])
+          result = (kind ? decorator(target, key, result) : decorator(result)) || result;
+      if (kind && result)
+        __defProp(target, key, result);
+      return result;
+    };
+    let ClothTest = class extends MWCore__default["default"].MWScript {
+      OnLoad() {
+        Events__default["default"].AddPlayerJoinedListener((player) => {
+          this.RandomChangeCloth(player);
+        });
+      }
+      RandomChangeCloth(player) {
+      }
+      GetRandomNum(Min, Max) {
+        var Range = Max - Min;
+        var Rand = Math.random();
+        return Min + Math.round(Rand * Range);
+      }
+    };
+    ClothTest = __decorateClass([
+      MWCore__default["default"].MWClass
+    ], ClothTest);
+    var ClothTest$1 = ClothTest;
+
+    var foreign0 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+        __proto__: null,
+        'default': ClothTest$1
+    }, Symbol.toStringTag, { value: 'Module' }));
+
+    const MWModuleMap = {
+      "JavaScripts/ChangeClothes": foreign0
+    };
+
+    exports.MWModuleMap = MWModuleMap;
+
+    Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
+
+}));
+//# sourceMappingURL=game.js.map

@@ -1,0 +1,6 @@
+import * as foreign0 from './JavaScripts/ChangeClothes';
+
+
+export const MWModuleMap = {
+    'JavaScripts/ChangeClothes': foreign0, 
+};

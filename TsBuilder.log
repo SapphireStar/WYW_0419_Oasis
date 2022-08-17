@@ -1,0 +1,19 @@
+*********************************Begin Build*********************************
+
+[36mvite v2.9.1 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 47 modules transformed.
+No name was provided for external module 'MWCore' in output.globals – guessing 'MWCore'
+No name was provided for external module 'Events' in output.globals – guessing 'Events'
+No name was provided for external module 'GamePlay' in output.globals – guessing 'GamePlay'
+No name was provided for external module 'DataStorage' in output.globals – guessing 'require$$3'
+No name was provided for external module 'Type' in output.globals – guessing 'Type'
+No name was provided for external module 'Global' in output.globals – guessing 'require$$5'
+No name was provided for external module 'ue' in output.globals – guessing 'require$$6'
+No name was provided for external module 'MWGameUI' in output.globals – guessing 'MWGameUI'
+No name was provided for external module 'MWMGS' in output.globals – guessing 'require$$8'
+No name was provided for external module 'MathLibrary' in output.globals – guessing 'require$$9'
+rendering chunks...
+[90m[37m[2mdist/[22m[90m[39m[36mgame.js  [39m [2m263.88 KiB[22m
+[90m[37m[2mdist/[22m[90m[39m[90mgame.js.map[39m [2m473.62 KiB[22m
+*********************************End Build*********************************

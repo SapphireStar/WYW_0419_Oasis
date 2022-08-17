@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "experimentalDecorators" : true,
+        "moduleResolution" : "Node",
+        "allowSyntheticDefaultImports" : true,
+        "module" : "ESNext",
+        "jsx" : "react",
+        "sourceMap" : true,
+        "baseUrl" : "../../../../../../../Content/node_modules/@types",
+        "typeRoots" : [
+            "../../../../../../../Content/Typing"
+        ] ,
+    },
+    "include": [
+        "./**/*"
+    ] ,
+}

@@ -1,0 +1,140 @@
+﻿{
+	"Version": "1",
+	"Guid": "CBB650A047B8AF654D39819C4BF11A5B",
+	"Name": "新建预制体.prefab",
+	"Type": "Prefab",
+	"Language":
+	{
+	},
+	"Icon": "",
+	"Size": 0,
+	"Url": "",
+	"Sha1": "",
+	"SortId": 0,
+	"Timestamp": 0,
+	"PrefabData":
+	{
+		"Scene": [
+			{
+				"Guid": "5C69FBEB4C2024C50D95DEA1ACEA41C7",
+				"Name": "新建预制体",
+				"Tag": "",
+				"RootComponent":
+				{
+					"Transform":
+					{
+						"Position":
+						{
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"Rotation":
+						{
+							"x": 0,
+							"y": 0,
+							"z": 0,
+							"w": 1
+						},
+						"Scale":
+						{
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				"Asset": "CBB650A047B8AF654D39819C4BF11A5B",
+				"ActorLevel": 0,
+				"ActorFlag": 71,
+				"SourceType": "Template",
+				"NetCullingDistance": 225000000,
+				"AlwaysRelevant": false,
+				"Visible": 1,
+				"Collision": 1,
+				"MWNetStatus": 3,
+				"ParentGuid": "",
+				"DestroyTimer": 0,
+				"LocalID": "E02DE613481AC8784503A9809E1E85B7",
+				"PrefabGUID": "CBB650A047B8AF654D39819C4BF11A5B",
+				"Children": [
+					{
+						"Guid": "0189F11D496A1E00F3E91E8C6F29FB6A",
+						"Name": "SM_Shape_Sphere",
+						"Tag": "",
+						"RootComponent":
+						{
+							"Transform":
+							{
+								"Position":
+								{
+									"x": 0,
+									"y": 0,
+									"z": 0
+								},
+								"Rotation":
+								{
+									"x": 0,
+									"y": 0,
+									"z": 0,
+									"w": 1
+								},
+								"Scale":
+								{
+									"x": 1,
+									"y": 1,
+									"z": 1
+								}
+							}
+						},
+						"Asset": "2594",
+						"ActorLevel": 0,
+						"ActorFlag": 71,
+						"SourceType": "资源对象/樱花校园/静态模型/Static Mesh/SM_Way_Road_002.uasset.json",
+						"NetCullingDistance": 225000000,
+						"AlwaysRelevant": false,
+						"Visible": 0,
+						"Collision": 1,
+						"MWNetStatus": 3,
+						"ParentGuid": "5C69FBEB4C2024C50D95DEA1ACEA41C7",
+						"DestroyTimer": 0,
+						"LocalID": "951A2E224FCED7A6656534B58B4B4649",
+						"StaticMesh":
+						{
+							"Asset": "1319",
+							"Materials":
+							{
+								"0": "2392"
+							}
+						},
+						"SimulatePhysics": false,
+						"EnableMass": false,
+						"MassInKg": 100,
+						"LinerDamping": 0.0010000000474974513,
+						"AngularDamping": 0,
+						"EnableGravity": true,
+						"LockPositionX": false,
+						"LockPositionY": false,
+						"LockPositionZ": false,
+						"LockRotationX": false,
+						"LockRotationY": false,
+						"LockRotationZ": false,
+						"IgnoreRadialImpulse": false,
+						"IgnoreRadialForce": false,
+						"ApplyImpulseOnDamage": false,
+						"Children": []
+					}
+				]
+			}
+		],
+		"Materials": [
+			{
+				"Guid": "2392",
+				"Asset": "2392",
+				"Metallic": 0,
+				"Roughness": 0.5
+			}
+		]
+	},
+	"LocalID": "611141E243068A0F3244759EF7A8FB7A"
+}

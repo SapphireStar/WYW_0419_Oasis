@@ -1,0 +1,20 @@
+[WorldSetting]
+gravityType=2
+gravityNum=-980.000000
+campType=1
+campNum=1
+MaxPlayerNum=1
+joinMidway=True
+voiceOpen=False
+PlayerOfCampNum_1=1
+autoReconnectTime=10
+matchReconnectTime=60
+
+[ResolutionSettings]
+bIsFill=True
+bIsUseCustom=False
+NewBGAspectRatio=1.777778
+NewPaddingPercent=X=0.100 Y=0.060
+NewBrushName=Border_iPhoneX
+SelectedIndex=0
+

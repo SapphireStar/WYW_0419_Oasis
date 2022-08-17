@@ -1,0 +1,65 @@
+﻿{
+	"Version": "1",
+	"Guid": "92EAA16E4149D5E2F88A52ACF90D7051",
+	"Name": "NewPrefab.prefab",
+	"Type": "Prefab",
+	"Language":
+	{
+	},
+	"Icon": "",
+	"Size": 0,
+	"Url": "",
+	"Sha1": "",
+	"SortId": 0,
+	"Timestamp": 0,
+	"PrefabData":
+	{
+		"Scene": [
+			{
+				"Guid": "E9C6AEC54EDB12FE32BC6FB9EDAB3CE3",
+				"Name": "NewPrefab",
+				"Tag": "",
+				"RootComponent":
+				{
+					"Transform":
+					{
+						"Position":
+						{
+							"x": 0,
+							"y": 0,
+							"z": 0
+						},
+						"Rotation":
+						{
+							"x": 0,
+							"y": 0,
+							"z": 0,
+							"w": 1
+						},
+						"Scale":
+						{
+							"x": 1,
+							"y": 1,
+							"z": 1
+						}
+					}
+				},
+				"Asset": "92EAA16E4149D5E2F88A52ACF90D7051",
+				"ActorLevel": 0,
+				"ActorFlag": 71,
+				"SourceType": "Template",
+				"NetCullingDistance": 225000000,
+				"AlwaysRelevant": false,
+				"Visible": 1,
+				"Collision": 1,
+				"MWNetStatus": 3,
+				"ParentGuid": "",
+				"DestroyTimer": 0,
+				"LocalID": "E02DE613481AC8784503A9809E1E85B7",
+				"PrefabGUID": "92EAA16E4149D5E2F88A52ACF90D7051",
+				"Children": []
+			}
+		]
+	},
+	"LocalID": "3C2C9ADC444C75B420FAAC9B1D51CAB2"
+}
