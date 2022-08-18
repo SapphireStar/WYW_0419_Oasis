@@ -1,1 +1,1 @@
-{"playerID":25930,"CoinDataInfo":{"version":1,"count":3},"PlayerDataInfo":{"version":1,"hp":100,"flyCD":0,"invisibleCD":0,"deathCountDown":-1,"canFly":true,"canInvisible":true}}
+{"playerID":25930,"CoinDataInfo":{"version":1,"count":1},"PlayerDataInfo":{"version":1,"hp":100,"flyCD":0,"invisibleCD":0,"deathCountDown":0,"canFly":false,"canInvisible":false,"kill":0,"death":0,"spawnPointx":634.02001953125,"spawnPointy":1616.9100341796875,"spawnPointz":143.14999389648438},"GameControlDataInfo":{"version":1,"curTime":19,"isGameStart":true}}

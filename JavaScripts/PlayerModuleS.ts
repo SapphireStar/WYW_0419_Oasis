@@ -1,16 +1,39 @@
-﻿import { ModuleS, UI } from "odin";
+﻿import { DataCenterS, ModuleS, UI } from "odin";
 import { PlayerModuleC } from "./PlayerModuleC";
 import { PlayerData } from "./PlayerData";
+import { GameControlData } from "./GameControlData";
 
 export class PlayerModuleS extends ModuleS<PlayerModuleC,PlayerData> {
 	onStart(): void {
 		
 	}
 
+	execute(param?: number, data?: any): void {
+		//重置模块数据
+		this.currentData.initAllData();
+		this.currentPlayer.character.switchToWalking();
+		this.currentPlayer.character.isVisible = true;
+		this.currentData.saveData(true);
+
+		//所有玩家回到初生点
+		this.currentPlayer.character.location = this.currentData.spawnPoint;
+		
+	}
+
+	public net_SetSpawnPoint(pos:Type.Vector){
+		this.currentData.setSpawnPoint(pos);
+	}
+
+	public net_SetName(){
+		this.currentData.setName(this.currentPlayer.character.name);
+		this.currentData.saveData(true);
+	}
+
 	public net_PlayerDead(){
 		this.currentPlayer.character.ragdoll(true);
 		this.currentData.startDeathCount();
 		this.currentData.initHp();
+		this.currentData.addDeath();
 		this.currentData.saveData(true);
 	}
 
@@ -19,7 +42,10 @@ export class PlayerModuleS extends ModuleS<PlayerModuleC,PlayerData> {
 		this.currentData.saveData(true);
 		this.currentPlayer.character.ragdoll(false);
 		let startPoints = MWCore.GameObject.getGameObjectsByName("StartPoint");
-		this.currentPlayer.character.setLocationAndRotation(startPoints[Math.floor(Math.random()*startPoints.length)].location,this.currentPlayer.character.rotation);
+
+		//若游戏还在进行，就随机一个初生点复活
+		if(DataCenterS.instance.getModuleData(this.currentPlayer,GameControlData).isGameStart)
+			this.currentPlayer.character.setLocationAndRotation(startPoints[Math.floor(Math.random()*startPoints.length)].location,this.currentPlayer.character.rotation);
 		
 	}
 

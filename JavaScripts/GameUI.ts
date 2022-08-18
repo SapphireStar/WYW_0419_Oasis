@@ -11,13 +11,19 @@ export default class GameUI extends UI_GameUI {
 	/** 仅在游戏时间对非模板实例调用一次 */
 	public override onStart() {
 		if (GamePlay.isClient()) {
+
 			//绑定金币数量UI
 			let coinData = DataCenterC.instance.getModuleData(CoinData);
 			this.mCoinCount.setText(coinData.count.toString());
 			coinData.onDataChange.add(()=>{
 				this.mCoinCount.setText(coinData.count.toString());
-			})
+				this.mProgressBar.setCurrentValue(coinData.count/coinData.totalCoin);
+			});
 
+			//绑定跳跃UI
+			this.mJumpButton.onClicked().add(()=>{
+				ModuleManager.instance.getModule(PlayerModuleC).jump();
+			});
 
 			//绑定开火UI
 			this.mFireJoyStick.onJoyStickDown().add(() => {
@@ -88,7 +94,6 @@ export default class GameUI extends UI_GameUI {
 		}
 
 	}
-
 
 	/** 对象被销毁时调用 */
 	public onDestroy() {

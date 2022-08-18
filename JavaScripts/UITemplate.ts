@@ -51,6 +51,7 @@ export class UI_GameUI extends ViewBase {
 	public mCoinCount: MWGameUI.MWUITextblock;
 	public mHealthBar: MWGameUI.MWUIProgressbar;
 	public mCountDown: MWGameUI.MWUITextblock;
+	public mProgressBar: MWGameUI.MWUIProgressbar;
 
     constructor() {
         super("GameUI");
@@ -67,6 +68,7 @@ export class UI_GameUI extends ViewBase {
 		this.mCoinCount = this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mCoinCount");
 		this.mHealthBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mHealthBar");
 		this.mCountDown = this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mCountDown");
+		this.mProgressBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mProgressBar");
 		this.mJumpButton.onClicked().add(() => {
 			Events.dispatchLocal("PlayButtonClick", "mJumpButton");
 		});
@@ -83,6 +85,7 @@ export class UI_GameUI extends ViewBase {
 		LanUtil.setUILanguage(this.mInvisibleCountDown);
 		LanUtil.setUILanguage(this.mCoinCount);
 		LanUtil.setUILanguage(this.mCountDown);
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/CollectText"));
 
     }
 }
@@ -111,11 +114,30 @@ export class UI_HitPromptUI extends ViewBase {
 
     }
 }
+export class UI_LeaderBoardSubUI extends ViewBase {
+
+    constructor() {
+        super("LeaderBoardSubUI");
+    }
+    public buildSelf(): void {
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MWTextBlock_1"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MWTextBlock_1_1"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MWTextBlock_1_2"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MWTextBlock_1_3"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MWTextBlock_1_4"));
+
+    }
+}
 export class UI_LeaderBoardUI extends ViewBase {
 	public mTitle_txt: MWGameUI.MWUITextblock;
 	public mFieldName: MWGameUI.MWUICanvas;
-	public mContent: MWGameUI.MWUICanvas;
 	public mSelfList: MWGameUI.MWUICanvas;
+	public mRank1: MWGameUI.MWUICanvas;
+	public mRank2: MWGameUI.MWUICanvas;
+	public mRank3: MWGameUI.MWUICanvas;
+	public mRank4: MWGameUI.MWUICanvas;
+	public mRank5: MWGameUI.MWUICanvas;
+	public mRank6: MWGameUI.MWUICanvas;
 	public mClose_btn: MWGameUI.MWUIButton;
 
     constructor() {
@@ -124,8 +146,13 @@ export class UI_LeaderBoardUI extends ViewBase {
     public buildSelf(): void {
 		this.mTitle_txt = this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mTitle_txt");
 		this.mFieldName = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mFieldName");
-		this.mContent = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/ScrolView/mContent");
 		this.mSelfList = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList");
+		this.mRank1 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank1");
+		this.mRank2 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank2");
+		this.mRank3 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank3");
+		this.mRank4 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank4");
+		this.mRank5 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank5");
+		this.mRank6 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/MainView/mSelfList/mRank6");
 		this.mClose_btn = this.findChildByPath(MWGameUI.MWUIButton, "Canvas/mClose_btn");
 		LanUtil.setUILanguage(this.mTitle_txt);
 		this.mClose_btn.onClicked().add(() => {
@@ -137,11 +164,36 @@ export class UI_LeaderBoardUI extends ViewBase {
 		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mFieldName/Field3_txt"));
 		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mFieldName/Field4_txt"));
 		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mFieldName/Field5_txt"));
-		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/Field1_txt"));
-		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/Field2_txt"));
-		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/Field3_txt"));
-		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/Field4_txt"));
-		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/Field5_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Kill"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Death"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Gold"));
 
     }
 }
@@ -149,6 +201,15 @@ export class UI_Main extends ViewBase {
 
     constructor() {
         super("Main");
+    }
+    public buildSelf(): void {
+
+    }
+}
+export class UI_NewUI extends ViewBase {
+
+    constructor() {
+        super("NewUI");
     }
     public buildSelf(): void {
 

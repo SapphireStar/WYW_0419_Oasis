@@ -1,11 +1,13 @@
 ﻿import { DataCenterS, ModuleManager, UI } from "odin";
 import { GameControlData } from "./GameControlData";
+import { PlayerData } from "./PlayerData";
+import { PlayerModuleS } from "./PlayerModuleS";
 
 @MWCore.MWClass
 export default class GameControl extends MWCore.MWScript {
 	//最大游戏时间
 	@MWCore.MWProperty()
-	public MaxGameTime:number = 300;
+	public MaxGameTime:number = 5;
 
 	//当前游戏时间
 	curTime:number;
@@ -19,10 +21,15 @@ export default class GameControl extends MWCore.MWScript {
 	protected onStart(): void {
 		if(GamePlay.isServer()){
 			this.bUseUpdate = true;
+			//监听开始游戏事件，开始计时
 			Events.addLocalListener("startGame",()=>{
-				this.curTime = this.MaxGameTime;
-				this.isGameStart = true;
+				if(!this.isGameStart){
+					this.curTime = this.MaxGameTime;
+					this.isGameStart = true;
+				}
 			});
+
+
 		}
 	}
 
@@ -35,6 +42,10 @@ export default class GameControl extends MWCore.MWScript {
 				this.timer=0;
 				this.curTime--;
 				Events.dispatchToAllClient("curTime",this.curTime);
+				if(this.curTime<=0){
+					this.isGameStart = false;
+					Events.dispatchToAllClient("stopGame");
+				}
 			}
 		}
 	}

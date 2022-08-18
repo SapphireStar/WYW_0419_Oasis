@@ -1,5 +1,7 @@
 ﻿import { DataCenterC, ModuleC, UI } from "odin";
 import { DeathCountDownUI } from "./DeathCountDownUI";
+import GameControl from "./GameControl";
+import { GameControlData } from "./GameControlData";
 import GameUI from "./GameUI";
 import { PlayerData } from "./PlayerData";
 import { PlayerModuleS } from "./PlayerModuleS";
@@ -16,6 +18,10 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
 
     public override onStart(): void {
         this.playerData = DataCenterC.instance.getModuleData(PlayerData);
+        this.server.net_SetName();
+
+        //让服务器记录初始初生点
+        this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
     }
 
     public override onUpdate(dt: number): void {
@@ -40,7 +46,11 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
             this.isDead = true;
             this.server.net_PlayerDead();
             UI.instance.hidePanel(GameUI);
-            UI.instance.showPanel(DeathCountDownUI);
+
+            //若玩家选择游戏开始，则显示死亡UI
+            if(DataCenterC.instance.getModuleData(GameControlData).isGameStart){
+                UI.instance.showPanel(DeathCountDownUI);
+            }
 
         }
     }
@@ -58,12 +68,21 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
                         this.isDead = false;
                     }, 500);
                     this.server.net_PlayerRecover();
-                    UI.instance.showPanel(GameUI);
                     UI.instance.hidePanel(DeathCountDownUI);
+
+                    //检查游戏时间，若游戏未结束，则继续显示游戏UI
+                    if(DataCenterC.instance.getModuleData(GameControlData).curTime>0&&DataCenterC.instance.getModuleData(GameControlData).isGameStart){
+                        UI.instance.showPanel(GameUI);  
+                    }
+
                 }
             }
 
         }
+    }
+
+    public jump(){
+        this.currentPlayer.character.jump();
     }
 
     public startFly() {

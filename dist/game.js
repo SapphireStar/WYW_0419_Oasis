@@ -6130,6 +6130,7 @@
 
     class CoinDataInfo extends dist.DataInfo {
       count;
+      totalCoin;
     }
     class CoinData extends dist.ModuleData {
       constructor() {
@@ -6141,12 +6142,21 @@
       onDataInit() {
         this.dataInfo.count = 0;
       }
+      initAllData() {
+        this.dataInfo.count = 0;
+      }
       addCount(count) {
         this.dataInfo.count += count;
         return this.dataInfo.count;
       }
+      setTotalCoin(value) {
+        this.dataInfo.totalCoin = value;
+      }
       get count() {
         return this.dataInfo.count;
+      }
+      get totalCoin() {
+        return this.dataInfo.totalCoin;
       }
     }
 
@@ -6163,19 +6173,26 @@
       }
       onStart() {
         this.coins = MWCore__default["default"].GameObject.getGameObjectsByName("Coin");
+        this.server.net_SetTotalCoin(this.coins.length);
         this.coins.forEach((coin) => {
           const trigger = coin.getChildByName("BoxTrigger");
           trigger.onEnter.Add((gameobject) => {
             if (GamePlay__default["default"].isCharacter(gameobject)) {
               const playerID = gameobject.player.getPlayerID();
               if (playerID == this.currentPlayerId) {
-                const coinIndex = this.coins.indexOf(coin);
+                this.coins.indexOf(coin);
                 this.server.net_Eat(gameobject.location);
-                this.coins.splice(coinIndex, 1);
-                coin.destroy();
+                coin.getChildByName("model").setVisibility(Type__default["default"].PropertyStatus.Off);
+                trigger.setCollisionEnabled(false);
               }
             }
           });
+        });
+      }
+      execute(type, param) {
+        this.coins.forEach((coin) => {
+          coin.getChildByName("model").setVisibility(Type__default["default"].PropertyStatus.On);
+          coin.getChildByName("BoxTrigger").setCollisionEnabled(true);
         });
       }
       onUpdate(dt) {
@@ -6194,10 +6211,17 @@
     class CoinModuleS extends dist.ModuleS {
       onStart() {
       }
+      execute(param, data) {
+        this.currentData.initAllData();
+        this.currentData.saveData(true);
+      }
       net_Eat(pos) {
         this.currentData.addCount(1);
         this.currentData.saveData(true);
         dist.SoundManager.instance.play3DSound("14639", pos, 1, 0.5);
+      }
+      net_SetTotalCoin(value) {
+        this.currentData.setTotalCoin(value);
       }
     }
 
@@ -6207,12 +6231,18 @@
     }, Symbol.toStringTag, { value: 'Module' }));
 
     class PlayerDataInfo extends dist.DataInfo {
+      name;
       hp;
       canFly;
       flyCD;
       canInvisible;
       invisibleCD;
       deathCountDown;
+      kill;
+      death;
+      spawnPointx;
+      spawnPointy;
+      spawnPointz;
     }
     class PlayerData extends dist.ModuleData {
       constructor() {
@@ -6229,6 +6259,21 @@
         this.dataInfo.invisibleCD = 0;
         this.dataInfo.canFly = false;
         this.dataInfo.canInvisible = false;
+        this.dataInfo.kill = 0;
+        this.dataInfo.death = 0;
+      }
+      initAllData() {
+        this.dataInfo.hp = 100;
+        this.dataInfo.canFly = false;
+        this.dataInfo.flyCD = 0;
+        this.dataInfo.canInvisible = false;
+        this.dataInfo.invisibleCD = 0;
+        this.dataInfo.deathCountDown = 0;
+        this.dataInfo.kill = 0;
+        this.dataInfo.death = 0;
+      }
+      setName(name) {
+        this.dataInfo.name = name;
       }
       minusHp(damage) {
         this.dataInfo.hp -= damage;
@@ -6260,6 +6305,20 @@
       minusDeathCount() {
         this.dataInfo.deathCountDown--;
       }
+      addKill() {
+        this.dataInfo.kill++;
+      }
+      addDeath() {
+        this.dataInfo.death++;
+      }
+      setSpawnPoint(pos) {
+        this.dataInfo.spawnPointx = pos.x;
+        this.dataInfo.spawnPointy = pos.y;
+        this.dataInfo.spawnPointz = pos.z;
+      }
+      get name() {
+        return this.dataInfo.name;
+      }
       get hp() {
         return this.dataInfo.hp;
       }
@@ -6278,9 +6337,18 @@
       get invisibleCD() {
         return this.dataInfo.invisibleCD;
       }
+      get kill() {
+        return this.dataInfo.kill;
+      }
+      get death() {
+        return this.dataInfo.death;
+      }
+      get spawnPoint() {
+        return new Type__default["default"].Vector(this.dataInfo.spawnPointx, this.dataInfo.spawnPointy, this.dataInfo.spawnPointz);
+      }
     }
 
-    var foreign18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         PlayerData: PlayerData
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6332,6 +6400,7 @@
       mCoinCount;
       mHealthBar;
       mCountDown;
+      mProgressBar;
       constructor() {
         super("GameUI");
       }
@@ -6347,6 +6416,7 @@
         this.mCoinCount = this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/mCoinCount");
         this.mHealthBar = this.findChildByPath(MWGameUI__default["default"].MWUIProgressbar, "Canvas/mHealthBar");
         this.mCountDown = this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/mCountDown");
+        this.mProgressBar = this.findChildByPath(MWGameUI__default["default"].MWUIProgressbar, "Canvas/mProgressBar");
         this.mJumpButton.onClicked().add(() => {
           Events__default["default"].dispatchLocal("PlayButtonClick", "mJumpButton");
         });
@@ -6363,6 +6433,7 @@
         LanUtil.setUILanguage(this.mInvisibleCountDown);
         LanUtil.setUILanguage(this.mCoinCount);
         LanUtil.setUILanguage(this.mCountDown);
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/CollectText"));
       }
     }
     class UI_HitPromptUI extends dist.ViewBase {
@@ -6388,9 +6459,95 @@
         this.mUpLeft = this.findChildByPath(MWGameUI__default["default"].MWUIImage, "Canvas/mUpLeft");
       }
     }
+    class UI_LeaderBoardSubUI extends dist.ViewBase {
+      constructor() {
+        super("LeaderBoardSubUI");
+      }
+      buildSelf() {
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MWTextBlock_1"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MWTextBlock_1_1"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MWTextBlock_1_2"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MWTextBlock_1_3"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MWTextBlock_1_4"));
+      }
+    }
+    class UI_LeaderBoardUI extends dist.ViewBase {
+      mTitle_txt;
+      mFieldName;
+      mSelfList;
+      mRank1;
+      mRank2;
+      mRank3;
+      mRank4;
+      mRank5;
+      mRank6;
+      mClose_btn;
+      constructor() {
+        super("LeaderBoardUI");
+      }
+      buildSelf() {
+        this.mTitle_txt = this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mTitle_txt");
+        this.mFieldName = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mFieldName");
+        this.mSelfList = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList");
+        this.mRank1 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank1");
+        this.mRank2 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank2");
+        this.mRank3 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank3");
+        this.mRank4 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank4");
+        this.mRank5 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank5");
+        this.mRank6 = this.findChildByPath(MWGameUI__default["default"].MWUICanvas, "Canvas/MainView/mSelfList/mRank6");
+        this.mClose_btn = this.findChildByPath(MWGameUI__default["default"].MWUIButton, "Canvas/mClose_btn");
+        LanUtil.setUILanguage(this.mTitle_txt);
+        this.mClose_btn.onClicked().add(() => {
+          Events__default["default"].dispatchLocal("PlayButtonClick", "mClose_btn");
+        });
+        LanUtil.setUILanguage(this.mClose_btn);
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mFieldName/Field1_txt"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mFieldName/Field2_txt"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mFieldName/Field3_txt"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mFieldName/Field4_txt"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mFieldName/Field5_txt"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank1/Gold"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank2/Gold"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank3/Gold"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank4/Gold"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank5/Gold"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Rank"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Name"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Kill"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Death"));
+        LanUtil.setUILanguage(this.findChildByPath(MWGameUI__default["default"].MWUITextblock, "Canvas/MainView/mSelfList/mRank6/Gold"));
+      }
+    }
     class UI_Main extends dist.ViewBase {
       constructor() {
         super("Main");
+      }
+      buildSelf() {
+      }
+    }
+    class UI_NewUI extends dist.ViewBase {
+      constructor() {
+        super("NewUI");
       }
       buildSelf() {
       }
@@ -6416,13 +6573,16 @@
       }
     }
 
-    var foreign25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get LanUtil () { return LanUtil; },
         UI_DeadUI: UI_DeadUI,
         UI_GameUI: UI_GameUI,
         UI_HitPromptUI: UI_HitPromptUI,
+        UI_LeaderBoardSubUI: UI_LeaderBoardSubUI,
+        UI_LeaderBoardUI: UI_LeaderBoardUI,
         UI_Main: UI_Main,
+        UI_NewUI: UI_NewUI,
         UI_StartGameUI: UI_StartGameUI,
         UI_UIRoot: UI_UIRoot
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6455,7 +6615,7 @@
       return result;
     };
     let GameControl = class extends MWCore__default["default"].MWScript {
-      MaxGameTime = 300;
+      MaxGameTime = 5;
       curTime;
       timer = 0;
       isGameStart;
@@ -6463,8 +6623,10 @@
         if (GamePlay__default["default"].isServer()) {
           this.bUseUpdate = true;
           Events__default["default"].addLocalListener("startGame", () => {
-            this.curTime = this.MaxGameTime;
-            this.isGameStart = true;
+            if (!this.isGameStart) {
+              this.curTime = this.MaxGameTime;
+              this.isGameStart = true;
+            }
           });
         }
       }
@@ -6476,6 +6638,10 @@
             this.timer = 0;
             this.curTime--;
             Events__default["default"].dispatchToAllClient("curTime", this.curTime);
+            if (this.curTime <= 0) {
+              this.isGameStart = false;
+              Events__default["default"].dispatchToAllClient("stopGame");
+            }
           }
         }
       }
@@ -6496,6 +6662,7 @@
 
     class GameControlDataInfo extends dist.DataInfo {
       curTime;
+      isGameStart;
     }
     class GameControlData extends dist.ModuleData {
       constructor() {
@@ -6506,8 +6673,14 @@
       setCurTime(value) {
         this.dataInfo.curTime = value;
       }
+      setGameStart(value) {
+        this.dataInfo.isGameStart = value;
+      }
       get curTime() {
         return this.dataInfo.curTime;
+      }
+      get isGameStart() {
+        return this.dataInfo.isGameStart;
       }
     }
 
@@ -6524,6 +6697,8 @@
       invisibleTimer = 0;
       onStart() {
         this.playerData = dist.DataCenterC.instance.getModuleData(PlayerData);
+        this.server.net_SetName();
+        this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
       }
       onUpdate(dt) {
         this.checkIsDead();
@@ -6545,7 +6720,9 @@
           this.isDead = true;
           this.server.net_PlayerDead();
           dist.UI.instance.hidePanel(GameUI);
-          dist.UI.instance.showPanel(DeathCountDownUI);
+          if (dist.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
+            dist.UI.instance.showPanel(DeathCountDownUI);
+          }
         }
       }
       deathCountDown(dt) {
@@ -6560,11 +6737,16 @@
                 this.isDead = false;
               }, 500);
               this.server.net_PlayerRecover();
-              dist.UI.instance.showPanel(GameUI);
               dist.UI.instance.hidePanel(DeathCountDownUI);
+              if (dist.DataCenterC.instance.getModuleData(GameControlData).curTime > 0 && dist.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
+                dist.UI.instance.showPanel(GameUI);
+              }
             }
           }
         }
+      }
+      jump() {
+        this.currentPlayer.character.jump();
       }
       startFly() {
         this.server.net_PlayerFly();
@@ -6594,7 +6776,7 @@
       }
     }
 
-    var foreign19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         PlayerModuleC: PlayerModuleC
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6605,7 +6787,23 @@
       shootCD = 0.2;
       fireEffect;
       isEquipWeapon = false;
+      weaponObj = null;
+      weaponPos;
+      weaponRot;
       onStart() {
+        this.isEquipWeapon = false;
+        this.currentPlayer.character.moveFacingDirection = GamePlay__default["default"].MoveFacingDirection.ControllerDirection;
+      }
+      execute(type, param) {
+        this.stopShoot();
+        let gameUI = dist.UI.instance.getPanel(GameUI);
+        gameUI.mFireJoyStick.setVisibility(MWGameUI__default["default"].ESlateVisibility.Collapsed);
+        gameUI.mCrossHairs.setVisibility(MWGameUI__default["default"].ESlateVisibility.Hidden);
+        this.server.net_UnEquip(this.weaponObj, this.weaponPos, this.weaponRot);
+        this.weaponObj = null;
+        this.currentPlayer.character.animationStance = GamePlay__default["default"].AnimationStanceType.Empty;
+        this.currentPlayer.character.moveFacingDirection = GamePlay__default["default"].MoveFacingDirection.ControllerDirection;
+        this.currentPlayer.character.movementDirection = GamePlay__default["default"].MovementDirection.ViewDirection;
         this.isEquipWeapon = false;
       }
       onUpdate(dt) {
@@ -6622,7 +6820,9 @@
         if (player == this.currentPlayer && !this.isEquipWeapon) {
           this.isEquipWeapon = true;
           this.fireEffect = fireEffect;
-          weaponObj.getChildByName("BoxTrigger").destroy();
+          this.weaponPos = new Type__default["default"].Vector(weaponObj.location.x, weaponObj.location.y, weaponObj.location.z);
+          this.weaponRot = new Type__default["default"].Rotation(weaponObj.rotation.x, weaponObj.rotation.y, weaponObj.rotation.z);
+          this.weaponObj = weaponObj;
           this.server.net_Equiped(this.currentPlayer, weaponObj);
           player.character.animationStance = GamePlay__default["default"].AnimationStanceType.RifleStand;
           player.character.moveFacingDirection = GamePlay__default["default"].MoveFacingDirection.ControllerDirection;
@@ -6637,13 +6837,13 @@
       }
       stopShoot() {
         this.isShoot = false;
-        this.currentPlayer.character.animationStance = GamePlay__default["default"].AnimationStanceType.RifleStand;
+        if (this.isEquipWeapon)
+          this.currentPlayer.character.animationStance = GamePlay__default["default"].AnimationStanceType.RifleStand;
       }
       checkCollision() {
         if (this.currentPlayer.character.animationStance != GamePlay__default["default"].AnimationStanceType.RifleAimStand)
           this.currentPlayer.character.animationStance = GamePlay__default["default"].AnimationStanceType.RifleAimStand;
-        dist.SoundManager.instance.play3DSound("12563", this.fireEffect, 1, 0.5);
-        dist.EffectManager.instance.playEffectInGameObject("4388", this.fireEffect, 1);
+        this.server.net_PlayShootEffect(this.fireEffect);
         let startLoc = this.fireEffect.location;
         let endLoc = startLoc.addition(this.currentPlayer.character.cameraSystem.cameraWorldTransform.getForwardVector().multiply(1e4));
         endLoc.y += this.randomRange(-200, 200);
@@ -6664,7 +6864,7 @@
       }
     }
 
-    var foreign26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         WeaponModuleC: WeaponModuleC
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6687,6 +6887,10 @@
           this.mCoinCount.setText(coinData.count.toString());
           coinData.onDataChange.add(() => {
             this.mCoinCount.setText(coinData.count.toString());
+            this.mProgressBar.setCurrentValue(coinData.count / coinData.totalCoin);
+          });
+          this.mJumpButton.onClicked().add(() => {
+            dist.ModuleManager.instance.getModule(PlayerModuleC).jump();
           });
           this.mFireJoyStick.onJoyStickDown().add(() => {
             dist.ModuleManager.instance.getModule(WeaponModuleC).startShoot();
@@ -6763,25 +6967,86 @@
       }
     }
 
-    var foreign23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         StartGameUI: StartGameUI
     }, Symbol.toStringTag, { value: 'Module' }));
 
+    class LeaderBoardInfo {
+      name;
+      kill;
+      death;
+      gold;
+    }
+    class LeaderBoardUI extends UI_LeaderBoardUI {
+      selfLists;
+      onStart() {
+        if (GamePlay__default["default"].isClient()) {
+          this.mClose_btn.onClicked().add(() => {
+            dist.UI.instance.hidePanel(LeaderBoardUI);
+            dist.UI.instance.showPanel(StartGameUI);
+          });
+        }
+      }
+      updateLeaderBoard(playerInfos) {
+        for (let i = 0; i < playerInfos.length; i++) {
+          let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+          subUI.setVisibility(MWGameUI__default["default"].ESlateVisibility.Visible);
+          subUI.getChildByName("Rank").setText(i.toString());
+          subUI.getChildByName("Name").setText(playerInfos[i].name);
+          subUI.getChildByName("Kill").setText(playerInfos[i].kill.toString());
+          subUI.getChildByName("Death").setText(playerInfos[i].death.toString());
+          subUI.getChildByName("Gold").setText(playerInfos[i].gold.toString());
+        }
+      }
+    }
+
+    var foreign16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+        __proto__: null,
+        LeaderBoardInfo: LeaderBoardInfo,
+        LeaderBoardUI: LeaderBoardUI
+    }, Symbol.toStringTag, { value: 'Module' }));
+
+    class LeaderBoardModuleC extends dist.ModuleC {
+      async showLeaderBoard() {
+        let playerInfos = await this.server.net_GetData();
+        dist.UI.instance.showPanel(LeaderBoardUI);
+        dist.UI.instance.getPanel(LeaderBoardUI).updateLeaderBoard(playerInfos);
+      }
+    }
+
+    var foreign14 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+        __proto__: null,
+        LeaderBoardModuleC: LeaderBoardModuleC
+    }, Symbol.toStringTag, { value: 'Module' }));
+
     class GameControlModuleC extends dist.ModuleC {
       execute(type, param) {
-        dist.UI.instance.showPanel(StartGameUI);
       }
       onStart() {
         dist.UI.instance.showPanel(StartGameUI);
         Events__default["default"].addServerListener("curTime", (curTime) => {
           this.server.net_UpdateTime(curTime);
         });
+        Events__default["default"].addServerListener("stopGame", () => {
+          this.StopGame();
+        });
       }
       StartGame() {
         dist.UI.instance.hidePanel(StartGameUI);
         dist.UI.instance.showPanel(GameUI);
         this.server.net_StartGame();
+      }
+      async StopGame() {
+        dist.UI.instance.hidePanel(GameUI);
+        await dist.ModuleManager.instance.getModule(LeaderBoardModuleC).showLeaderBoard();
+        this.InitGame();
+      }
+      InitGame() {
+        dist.ModuleManager.instance.forEachModule((module) => {
+          module.execute();
+        });
+        this.server.net_InitGame();
       }
     }
 
@@ -6792,17 +7057,26 @@
 
     class GameControlModuleS extends dist.ModuleS {
       onStart() {
-        dist.UI.instance.showPanel(StartGameUI);
       }
       execute(param, data) {
-        dist.UI.instance.showPanel(StartGameUI);
+        console.log("server init");
       }
       net_StartGame() {
+        this.currentData.setGameStart(true);
         Events__default["default"].dispatchLocal("startGame");
+        this.currentPlayer.character.canMove = true;
       }
       net_UpdateTime(curTime) {
         this.currentData.setCurTime(curTime);
         this.currentData.saveData(true);
+      }
+      net_InitGame() {
+        this.currentPlayer.character.canMove = false;
+        this.currentData.setGameStart(false);
+        this.currentData.saveData(true);
+        dist.ModuleManager.instance.forEachModule((module) => {
+          module.execute();
+        });
       }
     }
 
@@ -6926,12 +7200,47 @@
         HitPromptModuleS: HitPromptModuleS
     }, Symbol.toStringTag, { value: 'Module' }));
 
+    class LeaderBoardModuleS extends dist.ModuleS {
+      async net_GetData() {
+        let players = GamePlay__default["default"].getAllPlayers();
+        let playerInfos = [];
+        for (let i = 0; i < players.length; i++) {
+          let playerInfo = new LeaderBoardInfo();
+          let playerData = dist.DataCenterS.instance.getModuleData(players[i], PlayerData);
+          playerInfo.name = playerData.name;
+          playerInfo.kill = playerData.kill;
+          playerInfo.death = playerData.death;
+          playerInfo.gold = dist.DataCenterS.instance.getModuleData(players[i], CoinData).count;
+          console.log("gold num:" + playerInfo.gold);
+          playerInfos.push(playerInfo);
+        }
+        await this.sort(playerInfos);
+        return playerInfos;
+      }
+      sort(playerInfos) {
+        for (let i = 0; i < playerInfos.length - 1; i++) {
+          for (let j = 0; j < playerInfos.length - 1 - i; j++) {
+            if (playerInfos[j].kill < playerInfos[j + 1].kill) {
+              let temp = playerInfos[j];
+              playerInfos[j] = playerInfos[j + 1];
+              playerInfos[j + 1] = temp;
+            }
+          }
+        }
+      }
+    }
+
+    var foreign15 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+        __proto__: null,
+        LeaderBoardModuleS: LeaderBoardModuleS
+    }, Symbol.toStringTag, { value: 'Module' }));
+
     class NpcModuleC extends dist.ModuleC {
       onStart() {
       }
     }
 
-    var foreign16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         NpcModuleC: NpcModuleC
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6963,7 +7272,7 @@
       }
     }
 
-    var foreign17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         NpcModuleS: NpcModuleS
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -6971,10 +7280,25 @@
     class PlayerModuleS extends dist.ModuleS {
       onStart() {
       }
+      execute(param, data) {
+        this.currentData.initAllData();
+        this.currentPlayer.character.switchToWalking();
+        this.currentPlayer.character.isVisible = true;
+        this.currentData.saveData(true);
+        this.currentPlayer.character.location = this.currentData.spawnPoint;
+      }
+      net_SetSpawnPoint(pos) {
+        this.currentData.setSpawnPoint(pos);
+      }
+      net_SetName() {
+        this.currentData.setName(this.currentPlayer.character.name);
+        this.currentData.saveData(true);
+      }
       net_PlayerDead() {
         this.currentPlayer.character.ragdoll(true);
         this.currentData.startDeathCount();
         this.currentData.initHp();
+        this.currentData.addDeath();
         this.currentData.saveData(true);
       }
       net_PlayerRecover() {
@@ -6982,7 +7306,8 @@
         this.currentData.saveData(true);
         this.currentPlayer.character.ragdoll(false);
         let startPoints = MWCore__default["default"].GameObject.getGameObjectsByName("StartPoint");
-        this.currentPlayer.character.setLocationAndRotation(startPoints[Math.floor(Math.random() * startPoints.length)].location, this.currentPlayer.character.rotation);
+        if (dist.DataCenterS.instance.getModuleData(this.currentPlayer, GameControlData).isGameStart)
+          this.currentPlayer.character.setLocationAndRotation(startPoints[Math.floor(Math.random() * startPoints.length)].location, this.currentPlayer.character.rotation);
       }
       net_DeathCount() {
         this.currentData.minusDeathCount();
@@ -7016,18 +7341,35 @@
       }
     }
 
-    var foreign20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         PlayerModuleS: PlayerModuleS
     }, Symbol.toStringTag, { value: 'Module' }));
 
     class WeaponModuleS extends dist.ModuleS {
+      onStart() {
+      }
+      execute(param, data) {
+      }
       net_Equiped(player, weaponObj) {
         player.character.attachGameObjectToCharacter(weaponObj, GamePlay__default["default"].CharacterSocketType.Right_Hand);
       }
+      net_UnEquip(weaponObj, weaponPos, weaponRot) {
+        if (weaponObj != null) {
+          this.currentPlayer.character.detachGameObjectFormCharacterSlot(weaponObj);
+          weaponObj.setVisibility(Type__default["default"].PropertyStatus.On);
+          weaponObj.location = weaponPos;
+          weaponObj.rotation = weaponRot;
+        }
+      }
       net_HitPlayer(player) {
-        dist.DataCenterS.instance.getModuleData(player, PlayerData).minusHp(30);
-        dist.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
+        if (dist.DataCenterS.instance.getModuleData(player, PlayerData).hp > 0) {
+          dist.DataCenterS.instance.getModuleData(player, PlayerData).minusHp(30);
+          dist.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
+          if (dist.DataCenterS.instance.getModuleData(player, PlayerData).hp <= 0) {
+            dist.DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData).addKill();
+          }
+        }
       }
       net_HitNpc(npc) {
         let playerData = dist.DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData);
@@ -7045,12 +7387,16 @@
         dist.DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData).saveData(true);
         dist.ModuleManager.instance.getModule(NpcModuleS).net_GetHit(npc, 30);
       }
+      net_PlayShootEffect(go) {
+        dist.SoundManager.instance.play3DSound("12563", go, 1, 0.5);
+        dist.EffectManager.instance.playEffectInGameObject("4388", go, 1);
+      }
       net_PlayHitEffect(pos) {
         dist.EffectManager.instance.playEffectInPos("13407", pos, 1, Type__default["default"].Rotation.zero, new Type__default["default"].Vector(0.5, 0.5, 0.5));
       }
     }
 
-    var foreign27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         WeaponModuleS: WeaponModuleS
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7075,6 +7421,7 @@
         dist.ModuleManager.instance.register(CoinModuleS, CoinModuleC, CoinData);
         dist.ModuleManager.instance.register(PlayerModuleS, PlayerModuleC, PlayerData);
         dist.ModuleManager.instance.register(GameControlModuleS, GameControlModuleC, GameControlData);
+        dist.ModuleManager.instance.register(LeaderBoardModuleS, LeaderBoardModuleC, null);
         dist.ModuleManager.instance.register(HitPromptModuleS, HitPromptModuleC, null);
         dist.ModuleManager.instance.register(NpcModuleS, NpcModuleC, null);
         dist.ModuleManager.instance.register(WeaponModuleS, WeaponModuleC, null);
@@ -7091,14 +7438,6 @@
     var foreign9 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return GameStart; }
-    }, Symbol.toStringTag, { value: 'Module' }));
-
-    var foreign14 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-        __proto__: null
-    }, Symbol.toStringTag, { value: 'Module' }));
-
-    var foreign15 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-        __proto__: null
     }, Symbol.toStringTag, { value: 'Module' }));
 
     var __defProp$4 = Object.defineProperty;
@@ -7124,7 +7463,7 @@
       MWCore__default["default"].MWClass
     ], Rifle$1);
 
-    var foreign21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return Rifle$1; }
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7152,7 +7491,7 @@
       MWCore__default["default"].MWClass
     ], RiflePick);
 
-    var foreign22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return RiflePick; }
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7174,7 +7513,7 @@
       MWGameUI__default["default"].MWUIMono
     ], UIRoot);
 
-    var foreign24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return UIRoot; }
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7186,7 +7525,7 @@
       }
     }
 
-    var foreign28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         BaseState: BaseState
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7200,7 +7539,7 @@
       }
     }
 
-    var foreign29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign30 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         DeadState: DeadState
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7237,7 +7576,7 @@
       }
     }
 
-    var foreign30 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign31 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         PatrolState: PatrolState
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7296,7 +7635,7 @@
       MWCore__default["default"].MWClass
     ], NPC);
 
-    var foreign31 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign32 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return NPC; }
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7313,21 +7652,52 @@
       return result;
     };
     let Rifle = class extends MWCore__default["default"].MWScript {
+      initPos;
+      initRot;
+      curPlayer;
+      isEquiped = false;
       onStart() {
+        this.initPos = this.gameObject.location;
+        this.initRot = this.gameObject.rotation;
         let boxTrigger = this.gameObject.getChildByName("BoxTrigger");
-        let fireEffect = this.gameObject.getChildByName("Fire");
         boxTrigger.onEnter.Add((gameObject) => {
           if (GamePlay__default["default"].isCharacter(gameObject)) {
-            dist.ModuleManager.instance.getModule(WeaponModuleC).pickWeapon(gameObject.player, this.gameObject, fireEffect);
+            this.curPlayer = gameObject;
+            if (GamePlay__default["default"].isClient() && !this.isEquiped) {
+              this.isEquiped = true;
+              let fireEffect = this.gameObject.getChildByName("Fire");
+              dist.ModuleManager.instance.getModule(WeaponModuleC).pickWeapon(gameObject.player, this.gameObject, fireEffect, boxTrigger);
+            }
           }
         });
+        if (GamePlay__default["default"].isClient()) {
+          Events__default["default"].addServerListener("stopGame", () => {
+            this.isEquiped = false;
+          });
+          Events__default["default"].addServerListener("enableWeapon", (obj) => {
+            if (obj == this.gameObject) {
+              this.isEquiped = false;
+            }
+          });
+        }
+        if (GamePlay__default["default"].isServer()) {
+          Events__default["default"].addPlayerLeftListener((player) => {
+            if (player.character == this.curPlayer) {
+              setTimeout(() => {
+                this.gameObject.location = this.initPos;
+                this.gameObject.rotation = this.initRot;
+                Events__default["default"].dispatchToAllClient("enableWeapon", this.gameObject);
+              }, 100);
+            }
+          });
+        }
       }
     };
     Rifle = __decorateClass([
       MWCore__default["default"].MWClass
     ], Rifle);
 
-    var foreign32 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    var foreign33 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
         __proto__: null,
         get default () { return Rifle; }
     }, Symbol.toStringTag, { value: 'Module' }));
@@ -7347,25 +7717,26 @@
       "JavaScripts/HitPromptModuleC": foreign11,
       "JavaScripts/HitPromptModuleS": foreign12,
       "JavaScripts/HitPromptUI": foreign13,
-      "JavaScripts/NewScript": foreign14,
-      "JavaScripts/NewScript1": foreign15,
-      "JavaScripts/NpcModuleC": foreign16,
-      "JavaScripts/NpcModuleS": foreign17,
-      "JavaScripts/PlayerData": foreign18,
-      "JavaScripts/PlayerModuleC": foreign19,
-      "JavaScripts/PlayerModuleS": foreign20,
-      "JavaScripts/Rifle": foreign21,
-      "JavaScripts/RiflePick": foreign22,
-      "JavaScripts/StartGameUI": foreign23,
-      "JavaScripts/UIRoot": foreign24,
-      "JavaScripts/UITemplate": foreign25,
-      "JavaScripts/WeaponModuleC": foreign26,
-      "JavaScripts/WeaponModuleS": foreign27,
-      "JavaScripts/FiniteStateMachine/BaseState": foreign28,
-      "JavaScripts/FiniteStateMachine/DeadState": foreign29,
-      "JavaScripts/FiniteStateMachine/PatrolState": foreign30,
-      "Prefabs/NPC/Script/NPC": foreign31,
-      "Prefabs/Weapon/Script/Rifle": foreign32
+      "JavaScripts/LeaderBoardModuleC": foreign14,
+      "JavaScripts/LeaderBoardModuleS": foreign15,
+      "JavaScripts/LeaderBoardUI": foreign16,
+      "JavaScripts/NpcModuleC": foreign17,
+      "JavaScripts/NpcModuleS": foreign18,
+      "JavaScripts/PlayerData": foreign19,
+      "JavaScripts/PlayerModuleC": foreign20,
+      "JavaScripts/PlayerModuleS": foreign21,
+      "JavaScripts/Rifle": foreign22,
+      "JavaScripts/RiflePick": foreign23,
+      "JavaScripts/StartGameUI": foreign24,
+      "JavaScripts/UIRoot": foreign25,
+      "JavaScripts/UITemplate": foreign26,
+      "JavaScripts/WeaponModuleC": foreign27,
+      "JavaScripts/WeaponModuleS": foreign28,
+      "JavaScripts/FiniteStateMachine/BaseState": foreign29,
+      "JavaScripts/FiniteStateMachine/DeadState": foreign30,
+      "JavaScripts/FiniteStateMachine/PatrolState": foreign31,
+      "Prefabs/NPC/Script/NPC": foreign32,
+      "Prefabs/Weapon/Script/Rifle": foreign33
     };
 
     exports.MWModuleMap = MWModuleMap;

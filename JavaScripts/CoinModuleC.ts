@@ -11,8 +11,10 @@ export class CoinModuleC extends ModuleC<CoinModuleS,CoinData> {
 		
 		this.coins = [];
 	}
+
 	override onStart(): void {
 		this.coins = MWCore.GameObject.getGameObjectsByName("Coin");
+		this.server.net_SetTotalCoin(this.coins.length);
 		this.coins.forEach((coin)=>{
 			const trigger = coin.getChildByName("BoxTrigger") as GamePlay.BoxTrigger;
 			trigger.onEnter.Add((gameobject:MWCore.GameObject)=>{
@@ -21,11 +23,19 @@ export class CoinModuleC extends ModuleC<CoinModuleS,CoinData> {
 					if(playerID == this.currentPlayerId){
 						const coinIndex = this.coins.indexOf(coin);
 						this.server.net_Eat(gameobject.location);
-						this.coins.splice(coinIndex,1);
-						coin.destroy();
+						coin.getChildByName("model").setVisibility(Type.PropertyStatus.Off);
+						trigger.setCollisionEnabled(false);
+						
 					}
 				}
 			});
+		});
+	}
+
+	execute(type?: number, param?: any): void {
+		this.coins.forEach((coin)=>{
+			coin.getChildByName("model").setVisibility(Type.PropertyStatus.On);
+			(coin.getChildByName("BoxTrigger") as GamePlay.BoxTrigger).setCollisionEnabled(true);
 		});
 	}
 

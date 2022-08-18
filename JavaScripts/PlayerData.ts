@@ -1,12 +1,24 @@
 ﻿import { DataInfo, ModuleData } from "odin";
 
 class PlayerDataInfo extends DataInfo{
+	//角色状态数据
+	name:string;
 	hp:number;
 	canFly:boolean;
 	flyCD:number;
 	canInvisible:boolean;
 	invisibleCD:number;
 	deathCountDown:number;
+
+	//角色排名数据
+	kill:number;
+	death:number;
+
+	//角色初生点
+	spawnPointx:number;
+	spawnPointy:number;
+	spawnPointz:number;
+
 }
 
 export class PlayerData extends ModuleData<PlayerDataInfo> {
@@ -26,6 +38,24 @@ export class PlayerData extends ModuleData<PlayerDataInfo> {
 		this.dataInfo.invisibleCD = 0;
 		this.dataInfo.canFly = false;
 		this.dataInfo.canInvisible = false;
+		this.dataInfo.kill = 0;
+		this.dataInfo.death = 0;
+		
+	}
+
+	public initAllData(){
+		this.dataInfo.hp = 100;
+		this.dataInfo.canFly = false;
+		this.dataInfo.flyCD = 0;
+		this.dataInfo.canInvisible = false;
+		this.dataInfo.invisibleCD = 0;
+		this.dataInfo.deathCountDown = 0;
+		this.dataInfo.kill = 0;
+		this.dataInfo.death = 0;
+	}
+
+	public setName(name:string){
+		this.dataInfo.name = name;
 	}
 
 	//血量数据逻辑
@@ -73,6 +103,23 @@ export class PlayerData extends ModuleData<PlayerDataInfo> {
 		this.dataInfo.deathCountDown--;
 	}
 
+	//角色排名数据逻辑
+	public addKill(){
+		this.dataInfo.kill++;
+	}
+	public addDeath(){
+		this.dataInfo.death++;
+	}
+
+	public setSpawnPoint(pos:Type.Vector){
+		this.dataInfo.spawnPointx = pos.x;
+		this.dataInfo.spawnPointy = pos.y;
+		this.dataInfo.spawnPointz = pos.z;
+	}
+
+	public get name(){
+		return this.dataInfo.name;
+	}
 
 	public get hp(){
 		return this.dataInfo.hp;
@@ -96,6 +143,18 @@ export class PlayerData extends ModuleData<PlayerDataInfo> {
 
 	public get invisibleCD(){
 		return this.dataInfo.invisibleCD;
+	}
+
+	public get kill(){
+		return this.dataInfo.kill;
+	}
+
+	public get death(){
+		return this.dataInfo.death;
+	}
+
+	public get spawnPoint(){
+		return new Type.Vector(this.dataInfo.spawnPointx,this.dataInfo.spawnPointy,this.dataInfo.spawnPointz);
 	}
 
 
