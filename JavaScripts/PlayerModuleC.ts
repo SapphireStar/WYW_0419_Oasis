@@ -1,4 +1,13 @@
-﻿import { DataCenterC, ModuleC, UI } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 16:29:54
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:37:01
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\PlayerModuleC.ts
+ * @Description: 客户端玩家模块负责检查玩家是否出界，判断玩家的死亡情况，并且负责技能CD和死亡的倒计时逻辑
+ * 
+ */
+import { DataCenterC, ModuleC, UI } from "odin";
 import { DeathCountDownUI } from "./DeathCountDownUI";
 import GameControl from "./GameControl";
 import { GameControlData } from "./GameControlData";

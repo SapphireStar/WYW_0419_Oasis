@@ -1,4 +1,14 @@
-﻿import { ModuleC, ModuleManager, UI } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-16 16:36:24
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:50:38
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\GameControlModuleC.ts
+ * @Description: 游戏流程控制模块客户端，接收来自UI的开始游戏请求，和GameControl mono类的结束消息，向服务端请求游戏的开始和结束
+ * 客户端主要负责UI的显隐，游戏结束后重置所有的客户端模块。
+ * 
+ */
+import { ModuleC, ModuleManager, SoundManager, UI } from "odin";
 import { GameControlData } from "./GameControlData";
 import {GameControlModuleS} from "./GameControlModuleS";
 import GameUI from "./GameUI";
@@ -29,9 +39,16 @@ export class GameControlModuleC extends ModuleC<GameControlModuleS,GameControlDa
 		UI.instance.hidePanel(StartGameUI);
 		UI.instance.showPanel(GameUI);
 		this.server.net_StartGame();
+
+		//播放BGM
+		SoundManager.instance.playBGM("14088",0.4);
 	}
 
 	public async StopGame(){
+		//停止播放BGM
+		SoundManager.instance.stopBGM();
+		SoundManager.instance.playSound("19641",1,0.5);
+
 		UI.instance.hidePanel(GameUI);
 		//展示结算界面
 		await ModuleManager.instance.getModule(LeaderBoardModuleC).showLeaderBoard();

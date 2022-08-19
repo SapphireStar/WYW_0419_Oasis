@@ -1,11 +1,19 @@
-﻿import { ModuleC } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 14:57:43
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:41:39
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\CoinModuleC.ts
+ * @Description: 金币模块客户端，获取所有的金币对象，并添加玩家进入事件，玩家获取金币后调用服务器方法增加金币数。游戏重置后，重置所有金币
+ * 
+ */
+import { ModuleC } from "odin";
 import { CoinData } from "./CoinData";
 import { CoinModuleS } from "./CoinModuleS";
 
 export class CoinModuleC extends ModuleC<CoinModuleS,CoinData> {
 	
 	coins:MWCore.GameObject[];
-	//coinGuids:string[] = ["E9C6AEC54EDB12FE32BC6FB9EDAB3CE3EBFC3A2F48CF75EDB5D23880AA7C5C52","E9C6AEC54EDB12FE32BC6FB9EDAB3CE37E1E48FB439768CB10D07FA1E96252C5","E9C6AEC54EDB12FE32BC6FB9EDAB3CE3C663CC024506B2729E81AE8146967CE9"];
 	_coinRotation:Type.Rotation = new Type.Rotation(0,0,0);
 	override onAwake(): void {
 		

@@ -26,7 +26,7 @@ export default class GameStart extends OdinGame {
 	private preloadAssets: string = this.preloads;
 
 	protected get preloads(){
-		return "14639,4173,4172,4388,12563,13407";
+		return "14639,4173,4172,4388,12563,13407,14088,19641,7990";
 	}
 
 

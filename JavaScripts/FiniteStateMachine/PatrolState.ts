@@ -1,5 +1,4 @@
-﻿import { Vector } from "ue";
-import { BaseState } from "./BaseState";
+﻿import { BaseState } from "./BaseState";
 
 export class PatrolState extends BaseState {
 
@@ -17,6 +16,8 @@ export class PatrolState extends BaseState {
 
 	public override enterState() {
 		this.wayPoints = MWCore.GameObject.getGameObjectsByName("WayPoint");
+		//进入巡逻状态后，随机当前目标点
+		this.curWayPointIndex = Math.floor(Math.random()*this.wayPoints.length);
 		this.npc.enableCollision = true;
 		this.npc.ragdoll(false);
 	}
@@ -31,13 +32,17 @@ export class PatrolState extends BaseState {
 		else{
 			this.timer-=dt;
 		}
-
-		if(Vector.Dist(new Vector(this.npc.location.x,this.npc.location.y,this.npc.location.z),new Vector(this.wayPoints[this.curWayPointIndex].location.x,this.wayPoints[this.curWayPointIndex].location.y,this.wayPoints[this.curWayPointIndex].location.z))<100){
+		
+		if(this.posDist(this.npc.location,this.wayPoints[this.curWayPointIndex].location)<100){
 			this.timer = 1;
 			this.wayPoints = MWCore.GameObject.getGameObjectsByName("WayPoint");
 			this.curWayPointIndex=(this.curWayPointIndex+1)%this.wayPoints.length;
 		}
 
+	}
+
+	public posDist(pos1:Type.Vector,pos2:Type.Vector){
+		return Math.sqrt(Math.pow(pos1.x-pos2.x,2)+Math.pow(pos1.y-pos2.y,2)+Math.pow(pos1.z-pos2.z,2));
 	}
 
 

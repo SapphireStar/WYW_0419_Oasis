@@ -1,4 +1,13 @@
-﻿import { DataCenterS, ModuleManager, UI } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-16 19:35:06
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:43:12
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\GameControl.ts
+ * @Description: GameContro mono类，负责游戏的倒计时功能，倒计时结束发送游戏结束消息
+ * 
+ */
+import { DataCenterS, ModuleManager, UI } from "odin";
 import { GameControlData } from "./GameControlData";
 import { PlayerData } from "./PlayerData";
 import { PlayerModuleS } from "./PlayerModuleS";

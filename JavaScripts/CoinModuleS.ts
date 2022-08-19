@@ -1,4 +1,13 @@
-﻿import { ModuleS, SoundManager } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 14:57:43
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:42:38
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\CoinModuleS.ts
+ * @Description: 接收客户端的请求，增加金币量，并播放声音
+ * 
+ */
+import { ModuleS, SoundManager } from "odin";
 import { CoinData } from "./CoinData";
 import { CoinModuleC } from "./CoinModuleC";
 

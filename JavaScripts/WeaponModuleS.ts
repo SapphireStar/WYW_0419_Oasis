@@ -1,4 +1,13 @@
-﻿import { DataCenterS, EffectManager, ModuleManager, ModuleS, Sound, SoundManager } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 14:57:43
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:23:52
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\WeaponModuleS.ts
+ * @Description: 服务端武器模块，负责为角色装备武器和播放特效。接收到来自客户端的射线检测结果时，根据不同结果做出不同操作
+ * 
+ */
+import { DataCenterS, EffectManager, ModuleManager, ModuleS, Sound, SoundManager } from "odin";
 import { NpcModuleS } from "./NpcModuleS";
 import { WeaponModuleC } from "./WeaponModuleC";
 import { PlayerData } from "./PlayerData";
@@ -46,32 +55,13 @@ export class WeaponModuleS extends ModuleS<WeaponModuleC, null> {
 	}
 
 	public net_HitNpc(npc: GamePlay.Humanoid) {
-		//随机给予玩家一个技能
-		let playerData = DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData);
-		if (!playerData.canFly && !playerData.canInvisible) {
-			if (Math.random() < 0.5) {
-				playerData.setCanFly(true);
-			}
-			else {
-				playerData.setCanInvisible(true);
-			}
-		}
-		else if (!playerData.canFly) {
-			playerData.setCanFly(true);
-		}
-		else if (!playerData.canInvisible) {
-			playerData.setCanInvisible(true);
-		}
-
-		DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData).saveData(true);
-
 		//告诉NPC被击中
-		ModuleManager.instance.getModule(NpcModuleS).net_GetHit(npc, 30);
+		ModuleManager.instance.getModule(NpcModuleS).net_GetHit(npc, 30,this.currentPlayer);
 	}
 
 	public net_PlayShootEffect(go: MWCore.GameObject) {
 		//播放射击特效
-		SoundManager.instance.play3DSound("12563", go, 1, 0.5);
+		SoundManager.instance.play3DSound("7990", go, 1, 0.7);
 		EffectManager.instance.playEffectInGameObject("4388", go, 1);
 	}
 

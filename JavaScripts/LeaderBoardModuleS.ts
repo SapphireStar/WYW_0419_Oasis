@@ -1,4 +1,13 @@
-﻿import { DataCenterS, ModuleManager, ModuleS } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-17 16:27:41
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:53:15
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\LeaderBoardModuleS.ts
+ * @Description: 排行榜模块服务端，接收来自客户端的数据请求，获取所有玩家数据后进行排序，再发送给客户端
+ * 
+ */
+import { DataCenterS, ModuleManager, ModuleS } from "odin";
 import { CoinData } from "./CoinData";
 import { LeaderBoardModuleC } from "./LeaderBoardModuleC";
 import { LeaderBoardInfo } from "./LeaderBoardUI";

@@ -1,4 +1,13 @@
-﻿import { DataCenterC, ModuleData, ModuleManager } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 14:57:43
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:46:59
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\GameUI.ts
+ * @Description: 主要控制游戏的常显UI，根据其他模块的数据来更新UI
+ * 
+ */
+import { DataCenterC, ModuleData, ModuleManager } from "odin";
 import { CoinData } from "./CoinData";
 import { GameControlData } from "./GameControlData";
 import { PlayerData } from "./PlayerData";

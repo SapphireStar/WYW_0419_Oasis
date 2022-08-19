@@ -1,4 +1,14 @@
-﻿import { ModuleC, UI } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 18:43:15
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 10:49:54
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\HitPromptModuleC.ts
+ * @Description: 受击提示模块客户端，负责接收服务端的受击信息，然后使用向量的点乘和叉乘，来判断攻击者与角色前向量的角度和左右位置，
+ * 将计算后的信息发送给受击提示UI，更新UI状态
+ * 
+ */
+import { ModuleC, UI } from "odin";
 import { HitPromptModuleS } from "./HitPromptModuleS";
 import HitPromptUI from "./HitPromptUI";
 
