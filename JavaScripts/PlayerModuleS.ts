@@ -2,9 +2,10 @@
  * @Author: Tianyi
  * @Date: 2022-08-15 16:30:01
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-19 10:38:26
+ * @LastEditTime: 2022-08-20 15:38:01
  * @FilePath: \WYW_0419_Oasis\JavaScripts\PlayerModuleS.ts
  * @Description: 接收客户端的倒计时信息，修改玩家的模块数据。接收来自UI的技能使用请求，若CD冷却完成，则允许使用技能
+ * 记录玩家初始初生点位置，游戏重置后还原玩家位置
  * 
  */
 import { DataCenterS, ModuleS, UI } from "odin";
@@ -34,7 +35,7 @@ export class PlayerModuleS extends ModuleS<PlayerModuleC,PlayerData> {
 	}
 
 	public net_SetName(){
-		this.currentData.setName(this.currentPlayer.character.name);
+		this.currentData.setName(this.currentPlayer.character.characterName);
 		this.currentData.saveData(true);
 	}
 

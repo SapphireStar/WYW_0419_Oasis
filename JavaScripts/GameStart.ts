@@ -9,7 +9,7 @@ import GameUI from "./GameUI";
 import { HitPromptModuleC } from "./HitPromptModuleC";
 import { HitPromptModuleS } from "./HitPromptModuleS";
 import HitPromptUI from "./HitPromptUI";
-import { LeaderBoardModuleC } from "./LeaderBoardModuleC";
+import { BoardModuleC } from "./LeaderBoardModuleC";
 import { LeaderBoardModuleS } from "./LeaderBoardModuleS";
 import { NpcModuleC } from "./NpcModuleC";
 import { NpcModuleS } from "./NpcModuleS";
@@ -34,7 +34,7 @@ export default class GameStart extends OdinGame {
 		ModuleManager.instance.register(CoinModuleS,CoinModuleC,CoinData);
 		ModuleManager.instance.register(PlayerModuleS,PlayerModuleC,PlayerData);
 		ModuleManager.instance.register(GameControlModuleS,GameControlModuleC,GameControlData);
-		ModuleManager.instance.register(LeaderBoardModuleS,LeaderBoardModuleC,null);
+		ModuleManager.instance.register(LeaderBoardModuleS,BoardModuleC,null);
 		ModuleManager.instance.register(HitPromptModuleS,HitPromptModuleC,null);
 		ModuleManager.instance.register(NpcModuleS,NpcModuleC,null);
 		ModuleManager.instance.register(WeaponModuleS,WeaponModuleC,null);

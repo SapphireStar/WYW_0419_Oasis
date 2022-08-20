@@ -2,7 +2,7 @@
  * @Author: Tianyi
  * @Date: 2022-08-15 14:57:43
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-19 10:46:59
+ * @LastEditTime: 2022-08-20 11:03:37
  * @FilePath: \WYW_0419_Oasis\JavaScripts\GameUI.ts
  * @Description: 主要控制游戏的常显UI，根据其他模块的数据来更新UI
  * 
@@ -10,6 +10,7 @@
 import { DataCenterC, ModuleData, ModuleManager } from "odin";
 import { CoinData } from "./CoinData";
 import { GameControlData } from "./GameControlData";
+import { LeaderBoardInfo } from "./LeaderBoardUI";
 import { PlayerData } from "./PlayerData";
 import { PlayerModuleC } from "./PlayerModuleC";
 import { UI_GameUI } from "./UITemplate";
@@ -41,7 +42,6 @@ export default class GameUI extends UI_GameUI {
 			this.mFireJoyStick.onJoyStickUp().add(() => {
 				ModuleManager.instance.getModule(WeaponModuleC).stopShoot();
 			});
-
 
 			//绑定飞行UI
 			let playerData = DataCenterC.instance.getModuleData(PlayerData);
@@ -100,8 +100,38 @@ export default class GameUI extends UI_GameUI {
 			DataCenterC.instance.getModuleData(GameControlData).onDataChange.add(()=>{
 				this.mCountDown.setText(DataCenterC.instance.getModuleData(GameControlData).curTime.toString());
 			});
+
+			//绑定显示积分榜按钮
+			this.mShowScoreBoard.onClicked().add(()=>{
+				if(this.mScoreBoard.getVisibility()==MWGameUI.ESlateVisibility.Hidden){
+					this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.SelfHitTestInvisible);
+				}
+				else{
+					this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+				}
+			});
+
+			//游戏结束后隐藏积分榜
+			Events.addServerListener("stopGame",()=>{
+				this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.Hidden);			
+			});
+
 		}
 
+	}
+
+	public updateScoreBoard(playerInfos:LeaderBoardInfo[]){
+		for(let i =0;i<playerInfos.length;i++){
+			let subUI = this.mSelfList.getChildByName("mRank"+(i+1).toString()) as MWGameUI.MWUICanvas;
+			subUI.setVisibility(MWGameUI.ESlateVisibility.SelfHitTestInvisible);
+			(subUI.getChildByName("Rank") as MWGameUI.MWUITextblock).setText((i+1).toString());
+			(subUI.getChildByName("Name") as MWGameUI.MWUITextblock).setText(playerInfos[i].name);
+			(subUI.getChildByName("Gold") as MWGameUI.MWUITextblock).setText(playerInfos[i].gold.toString());
+		}
+		for(let i = playerInfos.length;i<6;i++){
+			let subUI = this.mSelfList.getChildByName("mRank"+(i+1).toString()) as MWGameUI.MWUICanvas;
+			subUI.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+		}
 	}
 
 	/** 对象被销毁时调用 */

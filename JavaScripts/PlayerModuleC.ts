@@ -2,7 +2,7 @@
  * @Author: Tianyi
  * @Date: 2022-08-15 16:29:54
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-19 10:37:01
+ * @LastEditTime: 2022-08-20 15:54:51
  * @FilePath: \WYW_0419_Oasis\JavaScripts\PlayerModuleC.ts
  * @Description: 客户端玩家模块负责检查玩家是否出界，判断玩家的死亡情况，并且负责技能CD和死亡的倒计时逻辑
  * 
@@ -30,7 +30,7 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
         this.server.net_SetName();
 
         //让服务器记录初始初生点
-        this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
+        //this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
     }
 
     public override onUpdate(dt: number): void {
@@ -45,7 +45,12 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
         if((!this.isDead)&&(this.currentPlayer.character.location.z<-1000||this.currentPlayer.character.location.y<-6000||this.currentPlayer.character.location.x>6800||this.currentPlayer.character.location.y>7800||this.currentPlayer.character.location.x<-11000)){
             this.isDead = true;
             this.server.net_PlayerDead();
-            UI.instance.hidePanel(GameUI);
+
+            //由于发现如果在按住摇杆的情况下，hidepanel后再showpanel，会出现摇杆卡住的情况，所以通过设置透明度解决
+            //UI.instance.hidePanel(GameUI);
+            UI.instance.getPanel(GameUI).canvas.setRenderOpacity(0);
+            UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(0);
+            UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0);
             UI.instance.showPanel(DeathCountDownUI);
         }
     }
@@ -54,7 +59,12 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
         if (this.playerData.hp <= 0 && (!this.isDead)) {
             this.isDead = true;
             this.server.net_PlayerDead();
-            UI.instance.hidePanel(GameUI);
+            
+            //由于发现如果在按住摇杆的情况下，hidepanel后再showpanel，会出现摇杆卡住的情况，所以通过设置透明度解决
+            //UI.instance.hidePanel(GameUI);
+            UI.instance.getPanel(GameUI).canvas.setRenderOpacity(0);
+            UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(0);
+            UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0);
 
             //若玩家选择游戏开始，则显示死亡UI
             if(DataCenterC.instance.getModuleData(GameControlData).isGameStart){
@@ -81,7 +91,11 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
 
                     //检查游戏时间，若游戏未结束，则继续显示游戏UI
                     if(DataCenterC.instance.getModuleData(GameControlData).curTime>0&&DataCenterC.instance.getModuleData(GameControlData).isGameStart){
-                        UI.instance.showPanel(GameUI);  
+                        //由于发现如果在按住摇杆的情况下，hidepanel后再showpanel，会出现摇杆卡住的情况，所以通过设置透明度解决
+                        //UI.instance.showPanel(GameUI);  
+                        UI.instance.getPanel(GameUI).canvas.setRenderOpacity(1);
+                        UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(1);
+                        UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0.2);
                     }
 
                 }

@@ -151,8 +151,8 @@ var require_dist = __commonJS({
         });
       }
     };
-    var DataCenterC5 = _DataCenterC;
-    __publicField(DataCenterC5, "_instance");
+    var DataCenterC6 = _DataCenterC;
+    __publicField(DataCenterC6, "_instance");
     var _isListenServer = -1;
     var askMsgList = [];
     function isListenServer() {
@@ -570,8 +570,8 @@ var require_dist = __commonJS({
         return this.onlinePlayerIds;
       }
     };
-    var DataCenterS6 = _DataCenterS;
-    __publicField(DataCenterS6, "_instance");
+    var DataCenterS7 = _DataCenterS;
+    __publicField(DataCenterS7, "_instance");
     var TimeUtil = class {
       static get delayTime() {
         return this._delayTime;
@@ -1325,7 +1325,7 @@ var require_dist = __commonJS({
         this.ModuleDataClass = ModuleDataClass;
       }
       get data() {
-        return DataCenterC5.instance.getModuleData(this.ModuleDataClass);
+        return DataCenterC6.instance.getModuleData(this.ModuleDataClass);
       }
       onAwake() {
       }
@@ -1421,24 +1421,24 @@ var require_dist = __commonJS({
         }
       }
     };
-    var ModuleS8 = class extends NetObjectS {
+    var ModuleS9 = class extends NetObjectS {
       ModuleDataClass;
       constructor(ClientModuleClass, ModuleDataClass, netGuid, clientNetGuid) {
         super(netGuid, ClientModuleClass, true, clientNetGuid);
         this.ModuleDataClass = ModuleDataClass;
       }
       get currentData() {
-        let platerData = DataCenterS6.instance.getPlayerData(this.currentPlayer);
+        let platerData = DataCenterS7.instance.getPlayerData(this.currentPlayer);
         if (platerData != null) {
           return platerData.getModuleData(this.ModuleDataClass);
         }
         return null;
       }
       get enterGamePlayerMap() {
-        return ModuleManager12.instance["inGamePlayerMap"];
+        return ModuleManager13.instance["inGamePlayerMap"];
       }
       getPlayerData(player) {
-        return DataCenterS6.instance.getPlayerData(player).getModuleData(this.ModuleDataClass);
+        return DataCenterS7.instance.getPlayerData(player).getModuleData(this.ModuleDataClass);
       }
       onAwake() {
       }
@@ -1527,19 +1527,19 @@ var require_dist = __commonJS({
         this.forEachModule((moudle) => {
           this.startModule(moudle);
         }, SuperClass);
-        if (SuperClass == ModuleS8) {
+        if (SuperClass == ModuleS9) {
           this.inGamePlayerMap = /* @__PURE__ */ new Map();
-          DataCenterS6.instance.onPlayerJoined.add((player) => {
+          DataCenterS7.instance.onPlayerJoined.add((player) => {
             this.forEachModule((moudle) => {
               moudle["onPlayerJoined"](player);
             });
-          }, ModuleS8);
-          DataCenterS6.instance.onPlayerLeft.add((player) => {
+          }, ModuleS9);
+          DataCenterS7.instance.onPlayerLeft.add((player) => {
             this.forEachModule((moudle) => {
               moudle["onPlayerLeft"](player);
               let playerId = player.getPlayerID();
               this.inGamePlayerMap.delete(playerId);
-            }, ModuleS8);
+            }, ModuleS9);
           });
           Events__default["default"].addClientListener("PlayerEnterGame", (player) => {
             let playerId = player.getPlayerID();
@@ -1547,7 +1547,7 @@ var require_dist = __commonJS({
             this.inGamePlayerMap.set(playerId, player);
             this.forEachModule((moudle) => {
               moudle["onPlayerEnterGame"](player, reenter);
-            }, ModuleS8);
+            }, ModuleS9);
           });
         }
         TimeUtil.onEnterFrame.add(this.update, this);
@@ -1621,8 +1621,8 @@ var require_dist = __commonJS({
         _ModuleManager.instance["enterSceneAllModule"](1);
       }
     };
-    var ModuleManager12 = _ModuleManager;
-    __publicField(ModuleManager12, "_instance");
+    var ModuleManager13 = _ModuleManager;
+    __publicField(ModuleManager13, "_instance");
     var _Sound = class {
       onComplete = new Action();
       playId;
@@ -2559,8 +2559,8 @@ var require_dist = __commonJS({
         return Type__default["default"].Vector.zero;
       }
     };
-    var UI11 = _UI;
-    __publicField(UI11, "_instance");
+    var UI12 = _UI;
+    __publicField(UI12, "_instance");
     var OdinGame2 = class extends MWCore__default["default"].MWScript {
       consoleLevel = "3";
       languageIndex = "-1";
@@ -2572,7 +2572,7 @@ var require_dist = __commonJS({
           this.initServer();
           this.initClient();
         } else if (GamePlay__default["default"].isClient()) {
-          DataCenterC5.instance.init();
+          DataCenterC6.instance.init();
           this.initClient();
         } else {
           this.initServer();
@@ -2593,8 +2593,8 @@ var require_dist = __commonJS({
         return Number(this.languageIndex);
       }
       exitGame() {
-        ModuleManager12.instance["destroyAllModule"]();
-        ModuleManager12.instance.destroy();
+        ModuleManager13.instance["destroyAllModule"]();
+        ModuleManager13.instance.destroy();
         exports.NetManager.instance.destroy();
         exports.SoundManager.instance.destroy();
         exports.EffectManager.instance.destroy();
@@ -2603,11 +2603,11 @@ var require_dist = __commonJS({
       }
       initServer() {
         if (!OdinGame2.isListenServer()) {
-          DataCenterS6.instance.init();
+          DataCenterS7.instance.init();
         }
         this.onRegisterModule();
-        ModuleManager12.instance["awakeAllModule"](ModuleS8);
-        ModuleManager12.instance["startAllModule"](ModuleS8);
+        ModuleManager13.instance["awakeAllModule"](ModuleS9);
+        ModuleManager13.instance["startAllModule"](ModuleS9);
         this.showLog("InitServer Complete");
         exports.LogManager.instance.setLogLevel(Number(this.consoleLevel));
       }
@@ -2619,17 +2619,17 @@ var require_dist = __commonJS({
           return;
         }
         this.showLog("Wait UIRoot");
-        await UI11.ready();
+        await UI12.ready();
         this.showLoading("Start Init Client...", 0);
         if (!OdinGame2.isListenServer()) {
           this.showLoading("Wait Data...", 0.1);
-          await DataCenterC5.instance.ready();
+          await DataCenterC6.instance.ready();
         }
         this.showLoading("Wait CurrentPlayer...", 0.2);
         await GamePlay__default["default"].asyncGetCurrentPlayer();
         this.showLoading("Register Modules...", 0.3);
         this.onRegisterModule();
-        await ModuleManager12.instance.start(() => {
+        await ModuleManager13.instance.start(() => {
           this.showLoading("Awake All Module...", 0.65);
         }, () => {
           this.showLoading("Start First Module...", 0.7, true);
@@ -2791,7 +2791,7 @@ var require_dist = __commonJS({
       }
       saveData(syncToClient) {
         if (GamePlay__default["default"].isServer()) {
-          DataCenterS6.instance.saveModuleData(this, syncToClient);
+          DataCenterS7.instance.saveModuleData(this, syncToClient);
           this.syncToClient = syncToClient;
           this.onDataChange.call();
           this.syncToClient = syncToClient;
@@ -2800,7 +2800,7 @@ var require_dist = __commonJS({
       }
       syncData() {
         if (GamePlay__default["default"].isServer()) {
-          DataCenterS6.instance.syncModuleData(this);
+          DataCenterS7.instance.syncModuleData(this);
           this.onDataChange.call();
           this.syncToClient = true;
           return this;
@@ -3016,19 +3016,19 @@ var require_dist = __commonJS({
       }
       show(...params) {
         if (!this.isShow) {
-          UI11.instance["addChild"](this, this.getLayer());
+          UI12.instance["addChild"](this, this.getLayer());
           this.onShow(...params);
         }
         return this;
       }
       hide() {
         if (this.isShow) {
-          UI11.instance["removeChild"](this);
+          UI12.instance["removeChild"](this);
           this.onHide();
         }
       }
       get isShow() {
-        return UI11.instance["panelIsShow"](this);
+        return UI12.instance["panelIsShow"](this);
       }
       get name() {
         return this.constructor.name;
@@ -3132,19 +3132,19 @@ var require_dist = __commonJS({
       }
       show(...params) {
         if (!this.isShow) {
-          UI11.instance["addChild"](this, this.getLayer());
+          UI12.instance["addChild"](this, this.getLayer());
         }
         this.onShow(...params);
         return this;
       }
       hide() {
         if (this.isShow) {
-          UI11.instance["removeChild"](this);
+          UI12.instance["removeChild"](this);
           this.onHide();
         }
       }
       get isShow() {
-        return UI11.instance["panelIsShow"](this);
+        return UI12.instance["panelIsShow"](this);
       }
       get name() {
         return this.constructor.name;
@@ -3154,7 +3154,7 @@ var require_dist = __commonJS({
       }
       destroy() {
         this.onDestroy();
-        UI11.instance["removeChild"](this, true);
+        UI12.instance["removeChild"](this, true);
         this._view.destroy();
         this._view = null;
       }
@@ -3360,19 +3360,19 @@ var require_dist = __commonJS({
       }
       show(...params) {
         if (!this.isShow) {
-          UI11.instance["addChild"](this, this.getLayer());
+          UI12.instance["addChild"](this, this.getLayer());
         }
         this.onShow(...params);
         return this;
       }
       hide() {
         if (this.isShow) {
-          UI11.instance["removeChild"](this);
+          UI12.instance["removeChild"](this);
           this.onHide();
         }
       }
       get isShow() {
-        return UI11.instance["panelIsShow"](this);
+        return UI12.instance["panelIsShow"](this);
       }
       get name() {
         return this.constructor.name;
@@ -3382,7 +3382,7 @@ var require_dist = __commonJS({
       }
       destroy() {
         this.onDestroy();
-        UI11.instance["removeChild"](this, true);
+        UI12.instance["removeChild"](this, true);
         this.uiObject.destroyObject();
         this.localEventListener.clear();
       }
@@ -4579,8 +4579,8 @@ var require_dist = __commonJS({
     exports.CallBack = CallBack;
     exports.CameraUtil = CameraUtil;
     exports.CanvasController = CanvasController;
-    exports.DataCenterC = DataCenterC5;
-    exports.DataCenterS = DataCenterS6;
+    exports.DataCenterC = DataCenterC6;
+    exports.DataCenterS = DataCenterS7;
     exports.DataInfo = DataInfo4;
     exports.Easing = Easing;
     exports.Effect = Effect;
@@ -4593,8 +4593,8 @@ var require_dist = __commonJS({
     exports.MathUtil = MathUtil;
     exports.ModuleC = ModuleC8;
     exports.ModuleData = ModuleData5;
-    exports.ModuleManager = ModuleManager12;
-    exports.ModuleS = ModuleS8;
+    exports.ModuleManager = ModuleManager13;
+    exports.ModuleS = ModuleS9;
     exports.NetObject = NetObject;
     exports.NetObjectC = NetObjectC;
     exports.NetObjectS = NetObjectS;
@@ -4611,7 +4611,7 @@ var require_dist = __commonJS({
     exports.TabGroup = TabGroup;
     exports.TimeUtil = TimeUtil;
     exports.Tween = Tween;
-    exports.UI = UI11;
+    exports.UI = UI12;
     exports.VERSION = VERSION;
     exports.ViewBase = ViewBase2;
     exports.add = add;
@@ -4649,18 +4649,6 @@ __export(ChangeClothes_exports, {
   default: () => ChangeClothes_default
 });
 var ClothTest = class extends MWCore.MWScript {
-  OnLoad() {
-    Events.AddPlayerJoinedListener((player) => {
-      this.RandomChangeCloth(player);
-    });
-  }
-  RandomChangeCloth(player) {
-  }
-  GetRandomNum(Min, Max) {
-    var Range = Max - Min;
-    var Rand = Math.random();
-    return Min + Math.round(Rand * Range);
-  }
 };
 ClothTest = __decorateClass([
   MWCore.MWClass
@@ -4913,7 +4901,7 @@ __export(UITemplate_exports, {
   UI_LeaderBoardSubUI: () => UI_LeaderBoardSubUI,
   UI_LeaderBoardUI: () => UI_LeaderBoardUI,
   UI_Main: () => UI_Main,
-  UI_NewUI: () => UI_NewUI,
+  UI_ScoreBoardUI: () => UI_ScoreBoardUI,
   UI_StartGameUI: () => UI_StartGameUI,
   UI_UIRoot: () => UI_UIRoot
 });
@@ -4966,6 +4954,16 @@ var UI_GameUI = class extends import_odin5.ViewBase {
   mHealthBar;
   mCountDown;
   mProgressBar;
+  mScoreBoard;
+  mFieldName;
+  mSelfList;
+  mRank1;
+  mRank2;
+  mRank3;
+  mRank4;
+  mRank5;
+  mRank6;
+  mShowScoreBoard;
   constructor() {
     super("GameUI");
   }
@@ -4982,6 +4980,16 @@ var UI_GameUI = class extends import_odin5.ViewBase {
     this.mHealthBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mHealthBar");
     this.mCountDown = this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mCountDown");
     this.mProgressBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mProgressBar");
+    this.mScoreBoard = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard");
+    this.mFieldName = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mFieldName");
+    this.mSelfList = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList");
+    this.mRank1 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank1");
+    this.mRank2 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank2");
+    this.mRank3 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank3");
+    this.mRank4 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank4");
+    this.mRank5 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank5");
+    this.mRank6 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank6");
+    this.mShowScoreBoard = this.findChildByPath(MWGameUI.MWUIButton, "Canvas/mShowScoreBoard");
     this.mJumpButton.onClicked().add(() => {
       Events.dispatchLocal("PlayButtonClick", "mJumpButton");
     });
@@ -4998,7 +5006,32 @@ var UI_GameUI = class extends import_odin5.ViewBase {
     LanUtil.setUILanguage(this.mInvisibleCountDown);
     LanUtil.setUILanguage(this.mCoinCount);
     LanUtil.setUILanguage(this.mCountDown);
+    this.mShowScoreBoard.onClicked().add(() => {
+      Events.dispatchLocal("PlayButtonClick", "mShowScoreBoard");
+    });
+    LanUtil.setUILanguage(this.mShowScoreBoard);
     LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/CollectText"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field1_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field2_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field5_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Gold"));
   }
 };
 var UI_HitPromptUI = class extends import_odin5.ViewBase {
@@ -5110,11 +5143,48 @@ var UI_Main = class extends import_odin5.ViewBase {
   buildSelf() {
   }
 };
-var UI_NewUI = class extends import_odin5.ViewBase {
+var UI_ScoreBoardUI = class extends import_odin5.ViewBase {
+  mFieldName;
+  mSelfList;
+  mRank1;
+  mRank2;
+  mRank3;
+  mRank4;
+  mRank5;
+  mRank6;
   constructor() {
-    super("NewUI");
+    super("ScoreBoardUI");
   }
   buildSelf() {
+    this.mFieldName = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mFieldName");
+    this.mSelfList = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList");
+    this.mRank1 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank1");
+    this.mRank2 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank2");
+    this.mRank3 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank3");
+    this.mRank4 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank4");
+    this.mRank5 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank5");
+    this.mRank6 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank6");
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field1_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field2_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field5_txt"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Gold"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Rank"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Name"));
+    LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Gold"));
   }
 };
 var UI_StartGameUI = class extends import_odin5.ViewBase {
@@ -5221,6 +5291,7 @@ var GameControl_exports = {};
 __export(GameControl_exports, {
   default: () => GameControl
 });
+var import_odin7 = __toESM(require_dist());
 var GameControl = class extends MWCore.MWScript {
   MaxGameTime = 5;
   curTime;
@@ -5234,6 +5305,37 @@ var GameControl = class extends MWCore.MWScript {
           this.curTime = this.MaxGameTime;
           this.isGameStart = true;
         }
+      });
+      console.log("check point");
+      let spawnPoints;
+      let spawnPointMap;
+      setTimeout(() => {
+        spawnPoints = MWCore.GameObject.getGameObjectsByName("StartPoint");
+        spawnPointMap = /* @__PURE__ */ new Map();
+      }, 200);
+      Events.addPlayerJoinedListener((player) => {
+        setTimeout(() => {
+          for (let i = 0; i < spawnPoints.length; i++) {
+            if (!spawnPointMap.has(spawnPoints[i])) {
+              spawnPointMap.set(spawnPoints[i], player);
+              import_odin7.DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
+              player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
+              break;
+            } else if (spawnPointMap.get(spawnPoints[i]) == null) {
+              spawnPointMap.set(spawnPoints[i], player);
+              import_odin7.DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
+              player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
+              break;
+            }
+          }
+        }, 500);
+      });
+      Events.addPlayerLeftListener((player) => {
+        spawnPoints.forEach((spawnpoint) => {
+          if (spawnPointMap.get(spawnpoint) == player) {
+            spawnPointMap.set(spawnpoint, null);
+          }
+        });
       });
     }
   }
@@ -5267,12 +5369,12 @@ var GameControlData_exports = {};
 __export(GameControlData_exports, {
   GameControlData: () => GameControlData
 });
-var import_odin7 = __toESM(require_dist());
-var GameControlDataInfo = class extends import_odin7.DataInfo {
+var import_odin8 = __toESM(require_dist());
+var GameControlDataInfo = class extends import_odin8.DataInfo {
   curTime;
   isGameStart;
 };
-var GameControlData = class extends import_odin7.ModuleData {
+var GameControlData = class extends import_odin8.ModuleData {
   constructor() {
     super(GameControlDataInfo);
   }
@@ -5297,31 +5399,30 @@ var GameControlModuleC_exports = {};
 __export(GameControlModuleC_exports, {
   GameControlModuleC: () => GameControlModuleC
 });
-var import_odin14 = __toESM(require_dist());
+var import_odin15 = __toESM(require_dist());
 
 // JavaScripts/GameUI.ts
 var GameUI_exports = {};
 __export(GameUI_exports, {
   default: () => GameUI
 });
-var import_odin10 = __toESM(require_dist());
+var import_odin11 = __toESM(require_dist());
 
 // JavaScripts/PlayerModuleC.ts
 var PlayerModuleC_exports = {};
 __export(PlayerModuleC_exports, {
   PlayerModuleC: () => PlayerModuleC
 });
-var import_odin8 = __toESM(require_dist());
-var PlayerModuleC = class extends import_odin8.ModuleC {
+var import_odin9 = __toESM(require_dist());
+var PlayerModuleC = class extends import_odin9.ModuleC {
   playerData;
   isDead = false;
   deadTimer = 0;
   flyTimer = 0;
   invisibleTimer = 0;
   onStart() {
-    this.playerData = import_odin8.DataCenterC.instance.getModuleData(PlayerData);
+    this.playerData = import_odin9.DataCenterC.instance.getModuleData(PlayerData);
     this.server.net_SetName();
-    this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
   }
   onUpdate(dt) {
     this.checkIsDead();
@@ -5334,17 +5435,21 @@ var PlayerModuleC = class extends import_odin8.ModuleC {
     if (!this.isDead && (this.currentPlayer.character.location.z < -1e3 || this.currentPlayer.character.location.y < -6e3 || this.currentPlayer.character.location.x > 6800 || this.currentPlayer.character.location.y > 7800 || this.currentPlayer.character.location.x < -11e3)) {
       this.isDead = true;
       this.server.net_PlayerDead();
-      import_odin8.UI.instance.hidePanel(GameUI);
-      import_odin8.UI.instance.showPanel(DeathCountDownUI);
+      import_odin9.UI.instance.getPanel(GameUI).canvas.setRenderOpacity(0);
+      import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(0);
+      import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0);
+      import_odin9.UI.instance.showPanel(DeathCountDownUI);
     }
   }
   checkIsDead() {
     if (this.playerData.hp <= 0 && !this.isDead) {
       this.isDead = true;
       this.server.net_PlayerDead();
-      import_odin8.UI.instance.hidePanel(GameUI);
-      if (import_odin8.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
-        import_odin8.UI.instance.showPanel(DeathCountDownUI);
+      import_odin9.UI.instance.getPanel(GameUI).canvas.setRenderOpacity(0);
+      import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(0);
+      import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0);
+      if (import_odin9.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
+        import_odin9.UI.instance.showPanel(DeathCountDownUI);
       }
     }
   }
@@ -5360,9 +5465,11 @@ var PlayerModuleC = class extends import_odin8.ModuleC {
             this.isDead = false;
           }, 500);
           this.server.net_PlayerRecover();
-          import_odin8.UI.instance.hidePanel(DeathCountDownUI);
-          if (import_odin8.DataCenterC.instance.getModuleData(GameControlData).curTime > 0 && import_odin8.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
-            import_odin8.UI.instance.showPanel(GameUI);
+          import_odin9.UI.instance.hidePanel(DeathCountDownUI);
+          if (import_odin9.DataCenterC.instance.getModuleData(GameControlData).curTime > 0 && import_odin9.DataCenterC.instance.getModuleData(GameControlData).isGameStart) {
+            import_odin9.UI.instance.getPanel(GameUI).canvas.setRenderOpacity(1);
+            import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(1);
+            import_odin9.UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0.2);
           }
         }
       }
@@ -5404,8 +5511,8 @@ var WeaponModuleC_exports = {};
 __export(WeaponModuleC_exports, {
   WeaponModuleC: () => WeaponModuleC
 });
-var import_odin9 = __toESM(require_dist());
-var WeaponModuleC = class extends import_odin9.ModuleC {
+var import_odin10 = __toESM(require_dist());
+var WeaponModuleC = class extends import_odin10.ModuleC {
   isShoot = false;
   shootTime = 0;
   shootCD = 0.2;
@@ -5420,7 +5527,7 @@ var WeaponModuleC = class extends import_odin9.ModuleC {
   }
   execute(type, param) {
     this.stopShoot();
-    let gameUI = import_odin9.UI.instance.getPanel(GameUI);
+    let gameUI = import_odin10.UI.instance.getPanel(GameUI);
     gameUI.mFireJoyStick.setVisibility(MWGameUI.ESlateVisibility.Collapsed);
     gameUI.mCrossHairs.setVisibility(MWGameUI.ESlateVisibility.Hidden);
     this.server.net_UnEquip(this.weaponObj, this.weaponPos, this.weaponRot);
@@ -5451,7 +5558,7 @@ var WeaponModuleC = class extends import_odin9.ModuleC {
       player.character.animationStance = GamePlay.AnimationStanceType.RifleStand;
       player.character.moveFacingDirection = GamePlay.MoveFacingDirection.ControllerDirection;
       player.character.movementDirection = GamePlay.MovementDirection.ControllerDirection;
-      let gameUI = import_odin9.UI.instance.getPanel(GameUI);
+      let gameUI = import_odin10.UI.instance.getPanel(GameUI);
       gameUI.mFireJoyStick.setVisibility(MWGameUI.ESlateVisibility.Visible);
       gameUI.mCrossHairs.setVisibility(MWGameUI.ESlateVisibility.Visible);
     }
@@ -5492,22 +5599,22 @@ var WeaponModuleC = class extends import_odin9.ModuleC {
 var GameUI = class extends UI_GameUI {
   onStart() {
     if (GamePlay.isClient()) {
-      let coinData = import_odin10.DataCenterC.instance.getModuleData(CoinData);
+      let coinData = import_odin11.DataCenterC.instance.getModuleData(CoinData);
       this.mCoinCount.setText(coinData.count.toString());
       coinData.onDataChange.add(() => {
         this.mCoinCount.setText(coinData.count.toString());
         this.mProgressBar.setCurrentValue(coinData.count / coinData.totalCoin);
       });
       this.mJumpButton.onClicked().add(() => {
-        import_odin10.ModuleManager.instance.getModule(PlayerModuleC).jump();
+        import_odin11.ModuleManager.instance.getModule(PlayerModuleC).jump();
       });
       this.mFireJoyStick.onJoyStickDown().add(() => {
-        import_odin10.ModuleManager.instance.getModule(WeaponModuleC).startShoot();
+        import_odin11.ModuleManager.instance.getModule(WeaponModuleC).startShoot();
       });
       this.mFireJoyStick.onJoyStickUp().add(() => {
-        import_odin10.ModuleManager.instance.getModule(WeaponModuleC).stopShoot();
+        import_odin11.ModuleManager.instance.getModule(WeaponModuleC).stopShoot();
       });
-      let playerData = import_odin10.DataCenterC.instance.getModuleData(PlayerData);
+      let playerData = import_odin11.DataCenterC.instance.getModuleData(PlayerData);
       playerData.onDataChange.add(() => {
         if (playerData.canFly) {
           this.mFlyButton.setVisibility(MWGameUI.ESlateVisibility.Visible);
@@ -5523,7 +5630,7 @@ var GameUI = class extends UI_GameUI {
         }
       });
       this.mFlyButton.onReleased().add(() => {
-        import_odin10.ModuleManager.instance.getModule(PlayerModuleC).startFly();
+        import_odin11.ModuleManager.instance.getModule(PlayerModuleC).startFly();
       });
       playerData.onDataChange.add(() => {
         if (playerData.canInvisible) {
@@ -5540,22 +5647,45 @@ var GameUI = class extends UI_GameUI {
         }
       });
       this.mInvisibleButton.onReleased().add(() => {
-        import_odin10.ModuleManager.instance.getModule(PlayerModuleC).startInvisible();
+        import_odin11.ModuleManager.instance.getModule(PlayerModuleC).startInvisible();
       });
       this.mHealthBar.setCurrentValue(playerData.hp);
       playerData.onDataChange.add(() => {
         this.mHealthBar.setCurrentValue(playerData.hp);
       });
-      import_odin10.DataCenterC.instance.getModuleData(GameControlData).onDataChange.add(() => {
-        this.mCountDown.setText(import_odin10.DataCenterC.instance.getModuleData(GameControlData).curTime.toString());
+      import_odin11.DataCenterC.instance.getModuleData(GameControlData).onDataChange.add(() => {
+        this.mCountDown.setText(import_odin11.DataCenterC.instance.getModuleData(GameControlData).curTime.toString());
       });
+      this.mShowScoreBoard.onClicked().add(() => {
+        if (this.mScoreBoard.getVisibility() == MWGameUI.ESlateVisibility.Hidden) {
+          this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.SelfHitTestInvisible);
+        } else {
+          this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+        }
+      });
+      Events.addServerListener("stopGame", () => {
+        this.mScoreBoard.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+      });
+    }
+  }
+  updateScoreBoard(playerInfos) {
+    for (let i = 0; i < playerInfos.length; i++) {
+      let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+      subUI.setVisibility(MWGameUI.ESlateVisibility.SelfHitTestInvisible);
+      subUI.getChildByName("Rank").setText((i + 1).toString());
+      subUI.getChildByName("Name").setText(playerInfos[i].name);
+      subUI.getChildByName("Gold").setText(playerInfos[i].gold.toString());
+    }
+    for (let i = playerInfos.length; i < 6; i++) {
+      let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+      subUI.setVisibility(MWGameUI.ESlateVisibility.Hidden);
     }
   }
   onDestroy() {
     if (GamePlay.isClient()) {
-      import_odin10.DataCenterC.instance.getModuleData(CoinData).onDataChange.clear();
-      import_odin10.DataCenterC.instance.getModuleData(PlayerData).onDataChange.clear();
-      import_odin10.DataCenterC.instance.getModuleData(GameControlData).onDataChange.clear();
+      import_odin11.DataCenterC.instance.getModuleData(CoinData).onDataChange.clear();
+      import_odin11.DataCenterC.instance.getModuleData(PlayerData).onDataChange.clear();
+      import_odin11.DataCenterC.instance.getModuleData(GameControlData).onDataChange.clear();
     }
   }
 };
@@ -5566,9 +5696,9 @@ GameUI = __decorateClass([
 // JavaScripts/LeaderBoardModuleC.ts
 var LeaderBoardModuleC_exports = {};
 __export(LeaderBoardModuleC_exports, {
-  LeaderBoardModuleC: () => LeaderBoardModuleC
+  BoardModuleC: () => BoardModuleC
 });
-var import_odin13 = __toESM(require_dist());
+var import_odin14 = __toESM(require_dist());
 
 // JavaScripts/LeaderBoardUI.ts
 var LeaderBoardUI_exports = {};
@@ -5576,18 +5706,18 @@ __export(LeaderBoardUI_exports, {
   LeaderBoardInfo: () => LeaderBoardInfo,
   LeaderBoardUI: () => LeaderBoardUI
 });
-var import_odin12 = __toESM(require_dist());
+var import_odin13 = __toESM(require_dist());
 
 // JavaScripts/StartGameUI.ts
 var StartGameUI_exports = {};
 __export(StartGameUI_exports, {
   StartGameUI: () => StartGameUI
 });
-var import_odin11 = __toESM(require_dist());
+var import_odin12 = __toESM(require_dist());
 var StartGameUI = class extends UI_StartGameUI {
   onStart() {
     this.mStartGameButton.onClicked().add(() => {
-      import_odin11.ModuleManager.instance.getModule(GameControlModuleC).StartGame();
+      import_odin12.ModuleManager.instance.getModule(GameControlModuleC).StartGame();
     });
   }
 };
@@ -5604,8 +5734,8 @@ var LeaderBoardUI = class extends UI_LeaderBoardUI {
   onStart() {
     if (GamePlay.isClient()) {
       this.mClose_btn.onClicked().add(() => {
-        import_odin12.UI.instance.hidePanel(LeaderBoardUI);
-        import_odin12.UI.instance.showPanel(StartGameUI);
+        import_odin13.UI.instance.hidePanel(LeaderBoardUI);
+        import_odin13.UI.instance.showPanel(StartGameUI);
       });
     }
   }
@@ -5613,30 +5743,44 @@ var LeaderBoardUI = class extends UI_LeaderBoardUI {
     for (let i = 0; i < playerInfos.length; i++) {
       let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
       subUI.setVisibility(MWGameUI.ESlateVisibility.Visible);
-      subUI.getChildByName("Rank").setText(i.toString());
+      subUI.getChildByName("Rank").setText((i + 1).toString());
       subUI.getChildByName("Name").setText(playerInfos[i].name);
       subUI.getChildByName("Kill").setText(playerInfos[i].kill.toString());
       subUI.getChildByName("Death").setText(playerInfos[i].death.toString());
       subUI.getChildByName("Gold").setText(playerInfos[i].gold.toString());
     }
+    for (let i = playerInfos.length; i < 6; i++) {
+      let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+      subUI.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+    }
   }
 };
 
 // JavaScripts/LeaderBoardModuleC.ts
-var LeaderBoardModuleC = class extends import_odin13.ModuleC {
+var BoardModuleC = class extends import_odin14.ModuleC {
+  onStart() {
+    Events.addServerListener("curTime", () => {
+      if (import_odin14.UI.instance.getPanel(GameUI).mScoreBoard.getVisibility() == MWGameUI.ESlateVisibility.SelfHitTestInvisible)
+        this.updateScoreBoard();
+    });
+  }
   async showLeaderBoard() {
-    let playerInfos = await this.server.net_GetData();
-    import_odin13.UI.instance.showPanel(LeaderBoardUI);
-    import_odin13.UI.instance.getPanel(LeaderBoardUI).updateLeaderBoard(playerInfos);
+    let playerInfos = await this.server.net_GetLeaderBoardData();
+    import_odin14.UI.instance.showPanel(LeaderBoardUI);
+    import_odin14.UI.instance.getPanel(LeaderBoardUI).updateLeaderBoard(playerInfos);
+  }
+  async updateScoreBoard() {
+    let playerInfos = await this.server.net_GetScoreBoardData();
+    import_odin14.UI.instance.getPanel(GameUI).updateScoreBoard(playerInfos);
   }
 };
 
 // JavaScripts/GameControlModuleC.ts
-var GameControlModuleC = class extends import_odin14.ModuleC {
+var GameControlModuleC = class extends import_odin15.ModuleC {
   execute(type, param) {
   }
   onStart() {
-    import_odin14.UI.instance.showPanel(StartGameUI);
+    import_odin15.UI.instance.showPanel(StartGameUI);
     Events.addServerListener("curTime", (curTime) => {
       this.server.net_UpdateTime(curTime);
     });
@@ -5645,20 +5789,25 @@ var GameControlModuleC = class extends import_odin14.ModuleC {
     });
   }
   StartGame() {
-    import_odin14.UI.instance.hidePanel(StartGameUI);
-    import_odin14.UI.instance.showPanel(GameUI);
+    import_odin15.UI.instance.hidePanel(StartGameUI);
+    import_odin15.UI.instance.showPanel(GameUI);
+    import_odin15.UI.instance.getPanel(GameUI).canvas.setRenderOpacity(1);
+    import_odin15.UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(1);
+    import_odin15.UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0.2);
     this.server.net_StartGame();
-    import_odin14.SoundManager.instance.playBGM("14088", 0.4);
+    import_odin15.SoundManager.instance.playBGM("14088", 0.4);
   }
   async StopGame() {
-    import_odin14.SoundManager.instance.stopBGM();
-    import_odin14.SoundManager.instance.playSound("19641", 1, 0.5);
-    import_odin14.UI.instance.hidePanel(GameUI);
-    await import_odin14.ModuleManager.instance.getModule(LeaderBoardModuleC).showLeaderBoard();
+    import_odin15.SoundManager.instance.stopBGM();
+    import_odin15.SoundManager.instance.playSound("19641", 1, 0.5);
+    await import_odin15.ModuleManager.instance.getModule(BoardModuleC).showLeaderBoard();
+    import_odin15.UI.instance.getPanel(GameUI).canvas.setRenderOpacity(0);
+    import_odin15.UI.instance.getPanel(GameUI).mFireJoyStick.setActiveOpacity(0);
+    import_odin15.UI.instance.getPanel(GameUI).mFireJoyStick.setInActiveOpacity(0);
     this.InitGame();
   }
   InitGame() {
-    import_odin14.ModuleManager.instance.forEachModule((module2) => {
+    import_odin15.ModuleManager.instance.forEachModule((module2) => {
       module2.execute();
     });
     this.server.net_InitGame();
@@ -5670,8 +5819,8 @@ var GameControlModuleS_exports = {};
 __export(GameControlModuleS_exports, {
   GameControlModuleS: () => GameControlModuleS
 });
-var import_odin15 = __toESM(require_dist());
-var GameControlModuleS = class extends import_odin15.ModuleS {
+var import_odin16 = __toESM(require_dist());
+var GameControlModuleS = class extends import_odin16.ModuleS {
   onStart() {
   }
   execute(param, data) {
@@ -5690,7 +5839,7 @@ var GameControlModuleS = class extends import_odin15.ModuleS {
     this.currentPlayer.character.canMove = false;
     this.currentData.setGameStart(false);
     this.currentData.saveData(true);
-    import_odin15.ModuleManager.instance.forEachModule((module2) => {
+    import_odin16.ModuleManager.instance.forEachModule((module2) => {
       module2.execute();
     });
   }
@@ -5701,14 +5850,14 @@ var GameStart_exports = {};
 __export(GameStart_exports, {
   default: () => GameStart
 });
-var import_odin23 = __toESM(require_dist());
+var import_odin24 = __toESM(require_dist());
 
 // JavaScripts/HitPromptModuleC.ts
 var HitPromptModuleC_exports = {};
 __export(HitPromptModuleC_exports, {
   HitPromptModuleC: () => HitPromptModuleC
 });
-var import_odin16 = __toESM(require_dist());
+var import_odin17 = __toESM(require_dist());
 
 // JavaScripts/HitPromptUI.ts
 var HitPromptUI_exports = {};
@@ -5744,10 +5893,10 @@ var HitPromptUI = class extends UI_HitPromptUI {
 };
 
 // JavaScripts/HitPromptModuleC.ts
-var HitPromptModuleC = class extends import_odin16.ModuleC {
+var HitPromptModuleC = class extends import_odin17.ModuleC {
   DirArr;
   onStart() {
-    import_odin16.UI.instance.showPanel(HitPromptUI);
+    import_odin17.UI.instance.showPanel(HitPromptUI);
     this.DirArr = [];
     for (let i = 0; i <= 7; i++) {
       this.DirArr[i] = 0;
@@ -5759,7 +5908,7 @@ var HitPromptModuleC = class extends import_odin16.ModuleC {
         this.DirArr[i] -= dt;
       }
     }
-    import_odin16.UI.instance.getPanel(HitPromptUI).updatePrompt(this.DirArr);
+    import_odin17.UI.instance.getPanel(HitPromptUI).updatePrompt(this.DirArr);
   }
   net_ShowHitPrompt(loc) {
     console.log("receive server showhitprompt");
@@ -5809,8 +5958,8 @@ var HitPromptModuleS_exports = {};
 __export(HitPromptModuleS_exports, {
   HitPromptModuleS: () => HitPromptModuleS
 });
-var import_odin17 = __toESM(require_dist());
-var HitPromptModuleS = class extends import_odin17.ModuleS {
+var import_odin18 = __toESM(require_dist());
+var HitPromptModuleS = class extends import_odin18.ModuleS {
   onStart() {
     Events.addClientListener("playerHit", (attacker, player, loc) => {
       console.log(player.character.name);
@@ -5827,28 +5976,50 @@ var LeaderBoardModuleS_exports = {};
 __export(LeaderBoardModuleS_exports, {
   LeaderBoardModuleS: () => LeaderBoardModuleS
 });
-var import_odin18 = __toESM(require_dist());
-var LeaderBoardModuleS = class extends import_odin18.ModuleS {
-  async net_GetData() {
+var import_odin19 = __toESM(require_dist());
+var LeaderBoardModuleS = class extends import_odin19.ModuleS {
+  async net_GetLeaderBoardData() {
     let players = GamePlay.getAllPlayers();
     let playerInfos = [];
     for (let i = 0; i < players.length; i++) {
       let playerInfo = new LeaderBoardInfo();
-      let playerData = import_odin18.DataCenterS.instance.getModuleData(players[i], PlayerData);
+      let playerData = import_odin19.DataCenterS.instance.getModuleData(players[i], PlayerData);
       playerInfo.name = playerData.name;
       playerInfo.kill = playerData.kill;
       playerInfo.death = playerData.death;
-      playerInfo.gold = import_odin18.DataCenterS.instance.getModuleData(players[i], CoinData).count;
-      console.log("gold num:" + playerInfo.gold);
+      playerInfo.gold = import_odin19.DataCenterS.instance.getModuleData(players[i], CoinData).count;
       playerInfos.push(playerInfo);
     }
-    await this.sort(playerInfos);
+    await this.sortLeaderBoardData(playerInfos);
     return playerInfos;
   }
-  sort(playerInfos) {
+  sortLeaderBoardData(playerInfos) {
     for (let i = 0; i < playerInfos.length - 1; i++) {
       for (let j = 0; j < playerInfos.length - 1 - i; j++) {
         if (playerInfos[j].kill < playerInfos[j + 1].kill) {
+          let temp = playerInfos[j];
+          playerInfos[j] = playerInfos[j + 1];
+          playerInfos[j + 1] = temp;
+        }
+      }
+    }
+  }
+  async net_GetScoreBoardData() {
+    let players = GamePlay.getAllPlayers();
+    let playerInfos = [];
+    for (let i = 0; i < players.length; i++) {
+      let playerInfo = new LeaderBoardInfo();
+      playerInfo.name = players[i].character.characterName;
+      playerInfo.gold = import_odin19.DataCenterS.instance.getModuleData(players[i], CoinData).count;
+      playerInfos.push(playerInfo);
+    }
+    await this.sortScoreBoardData(playerInfos);
+    return playerInfos;
+  }
+  sortScoreBoardData(playerInfos) {
+    for (let i = 0; i < playerInfos.length - 1; i++) {
+      for (let j = 0; j < playerInfos.length - 1 - i; j++) {
+        if (playerInfos[j].gold < playerInfos[j + 1].gold) {
           let temp = playerInfos[j];
           playerInfos[j] = playerInfos[j + 1];
           playerInfos[j + 1] = temp;
@@ -5863,8 +6034,8 @@ var NpcModuleC_exports = {};
 __export(NpcModuleC_exports, {
   NpcModuleC: () => NpcModuleC
 });
-var import_odin19 = __toESM(require_dist());
-var NpcModuleC = class extends import_odin19.ModuleC {
+var import_odin20 = __toESM(require_dist());
+var NpcModuleC = class extends import_odin20.ModuleC {
   onStart() {
   }
 };
@@ -5874,8 +6045,8 @@ var NpcModuleS_exports = {};
 __export(NpcModuleS_exports, {
   NpcModuleS: () => NpcModuleS
 });
-var import_odin20 = __toESM(require_dist());
-var NpcModuleS = class extends import_odin20.ModuleS {
+var import_odin21 = __toESM(require_dist());
+var NpcModuleS = class extends import_odin21.ModuleS {
   npcHp = 30;
   npcHpMap;
   onAwake() {
@@ -5890,7 +6061,7 @@ var NpcModuleS = class extends import_odin20.ModuleS {
     if (this.npcHpMap.has(npc) && this.npcHpMap.get(npc) > 0) {
       this.npcHpMap.set(npc, this.npcHpMap.get(npc) - damage);
       if (this.npcHpMap.get(npc) <= 0) {
-        let playerData = import_odin20.DataCenterS.instance.getModuleData(player, PlayerData);
+        let playerData = import_odin21.DataCenterS.instance.getModuleData(player, PlayerData);
         if (!playerData.canFly && !playerData.canInvisible) {
           if (Math.random() < 0.5) {
             playerData.setCanFly(true);
@@ -5902,7 +6073,7 @@ var NpcModuleS = class extends import_odin20.ModuleS {
         } else if (!playerData.canInvisible) {
           playerData.setCanInvisible(true);
         }
-        import_odin20.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
+        import_odin21.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
         Events.dispatchLocal("npcDead", npc);
         setTimeout(() => {
           Events.dispatchLocal("npcRecover", npc);
@@ -5921,8 +6092,8 @@ var PlayerModuleS_exports = {};
 __export(PlayerModuleS_exports, {
   PlayerModuleS: () => PlayerModuleS
 });
-var import_odin21 = __toESM(require_dist());
-var PlayerModuleS = class extends import_odin21.ModuleS {
+var import_odin22 = __toESM(require_dist());
+var PlayerModuleS = class extends import_odin22.ModuleS {
   onStart() {
   }
   execute(param, data) {
@@ -5936,7 +6107,7 @@ var PlayerModuleS = class extends import_odin21.ModuleS {
     this.currentData.setSpawnPoint(pos);
   }
   net_SetName() {
-    this.currentData.setName(this.currentPlayer.character.name);
+    this.currentData.setName(this.currentPlayer.character.characterName);
     this.currentData.saveData(true);
   }
   net_PlayerDead() {
@@ -5951,7 +6122,7 @@ var PlayerModuleS = class extends import_odin21.ModuleS {
     this.currentData.saveData(true);
     this.currentPlayer.character.ragdoll(false);
     let startPoints = MWCore.GameObject.getGameObjectsByName("StartPoint");
-    if (import_odin21.DataCenterS.instance.getModuleData(this.currentPlayer, GameControlData).isGameStart)
+    if (import_odin22.DataCenterS.instance.getModuleData(this.currentPlayer, GameControlData).isGameStart)
       this.currentPlayer.character.setLocationAndRotation(startPoints[Math.floor(Math.random() * startPoints.length)].location, this.currentPlayer.character.rotation);
   }
   net_DeathCount() {
@@ -5991,8 +6162,8 @@ var WeaponModuleS_exports = {};
 __export(WeaponModuleS_exports, {
   WeaponModuleS: () => WeaponModuleS
 });
-var import_odin22 = __toESM(require_dist());
-var WeaponModuleS = class extends import_odin22.ModuleS {
+var import_odin23 = __toESM(require_dist());
+var WeaponModuleS = class extends import_odin23.ModuleS {
   onStart() {
   }
   execute(param, data) {
@@ -6009,40 +6180,40 @@ var WeaponModuleS = class extends import_odin22.ModuleS {
     }
   }
   net_HitPlayer(player) {
-    if (import_odin22.DataCenterS.instance.getModuleData(player, PlayerData).hp > 0) {
-      import_odin22.DataCenterS.instance.getModuleData(player, PlayerData).minusHp(30);
-      import_odin22.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
-      if (import_odin22.DataCenterS.instance.getModuleData(player, PlayerData).hp <= 0) {
-        import_odin22.DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData).addKill();
+    if (import_odin23.DataCenterS.instance.getModuleData(player, PlayerData).hp > 0) {
+      import_odin23.DataCenterS.instance.getModuleData(player, PlayerData).minusHp(30);
+      import_odin23.DataCenterS.instance.getModuleData(player, PlayerData).saveData(true);
+      if (import_odin23.DataCenterS.instance.getModuleData(player, PlayerData).hp <= 0) {
+        import_odin23.DataCenterS.instance.getModuleData(this.currentPlayer, PlayerData).addKill();
       }
     }
   }
   net_HitNpc(npc) {
-    import_odin22.ModuleManager.instance.getModule(NpcModuleS).net_GetHit(npc, 30, this.currentPlayer);
+    import_odin23.ModuleManager.instance.getModule(NpcModuleS).net_GetHit(npc, 30, this.currentPlayer);
   }
   net_PlayShootEffect(go) {
-    import_odin22.SoundManager.instance.play3DSound("7990", go, 1, 0.7);
-    import_odin22.EffectManager.instance.playEffectInGameObject("4388", go, 1);
+    import_odin23.SoundManager.instance.play3DSound("7990", go, 1, 0.7);
+    import_odin23.EffectManager.instance.playEffectInGameObject("4388", go, 1);
   }
   net_PlayHitEffect(pos) {
-    import_odin22.EffectManager.instance.playEffectInPos("13407", pos, 1, Type.Rotation.zero, new Type.Vector(0.5, 0.5, 0.5));
+    import_odin23.EffectManager.instance.playEffectInPos("13407", pos, 1, Type.Rotation.zero, new Type.Vector(0.5, 0.5, 0.5));
   }
 };
 
 // JavaScripts/GameStart.ts
-var GameStart = class extends import_odin23.OdinGame {
+var GameStart = class extends import_odin24.OdinGame {
   preloadAssets = this.preloads;
   get preloads() {
     return "14639,4173,4172,4388,12563,13407,14088,19641,7990";
   }
   onRegisterModule() {
-    import_odin23.ModuleManager.instance.register(CoinModuleS, CoinModuleC, CoinData);
-    import_odin23.ModuleManager.instance.register(PlayerModuleS, PlayerModuleC, PlayerData);
-    import_odin23.ModuleManager.instance.register(GameControlModuleS, GameControlModuleC, GameControlData);
-    import_odin23.ModuleManager.instance.register(LeaderBoardModuleS, LeaderBoardModuleC, null);
-    import_odin23.ModuleManager.instance.register(HitPromptModuleS, HitPromptModuleC, null);
-    import_odin23.ModuleManager.instance.register(NpcModuleS, NpcModuleC, null);
-    import_odin23.ModuleManager.instance.register(WeaponModuleS, WeaponModuleC, null);
+    import_odin24.ModuleManager.instance.register(CoinModuleS, CoinModuleC, CoinData);
+    import_odin24.ModuleManager.instance.register(PlayerModuleS, PlayerModuleC, PlayerData);
+    import_odin24.ModuleManager.instance.register(GameControlModuleS, GameControlModuleC, GameControlData);
+    import_odin24.ModuleManager.instance.register(LeaderBoardModuleS, BoardModuleC, null);
+    import_odin24.ModuleManager.instance.register(HitPromptModuleS, HitPromptModuleC, null);
+    import_odin24.ModuleManager.instance.register(NpcModuleS, NpcModuleC, null);
+    import_odin24.ModuleManager.instance.register(WeaponModuleS, WeaponModuleC, null);
     if (GamePlay.isClient()) {
     }
   }
@@ -6079,7 +6250,7 @@ var NPC_exports = {};
 __export(NPC_exports, {
   default: () => NPC
 });
-var import_odin24 = __toESM(require_dist());
+var import_odin25 = __toESM(require_dist());
 var NPC = class extends MWCore.MWScript {
   curState;
   npcModule;
@@ -6087,7 +6258,7 @@ var NPC = class extends MWCore.MWScript {
   onStart() {
     if (GamePlay.isServer()) {
       console.log("npc init");
-      this.npcModule = import_odin24.ModuleManager.instance.getModule(NpcModuleS);
+      this.npcModule = import_odin25.ModuleManager.instance.getModule(NpcModuleS);
       this.npcModule.net_AddNpc(this.gameObject);
       this.curState = new PatrolState(this.gameObject);
       this.bUseUpdate = true;
@@ -6125,13 +6296,34 @@ NPC = __decorateClass([
   MWCore.MWClass
 ], NPC);
 
+// JavaScripts/ScoreBoardUI.ts
+var ScoreBoardUI_exports = {};
+__export(ScoreBoardUI_exports, {
+  ScoreBoardUI: () => ScoreBoardUI
+});
+var ScoreBoardUI = class extends UI_ScoreBoardUI {
+  updateScoreBoard(playerInfos) {
+    for (let i = 0; i < playerInfos.length; i++) {
+      let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+      subUI.setVisibility(MWGameUI.ESlateVisibility.Visible);
+      subUI.getChildByName("Rank").setText((i + 1).toString());
+      subUI.getChildByName("Name").setText(playerInfos[i].name);
+      subUI.getChildByName("Gold").setText(playerInfos[i].gold.toString());
+    }
+    for (let i = playerInfos.length; i < 6; i++) {
+      let subUI = this.mSelfList.getChildByName("mRank" + (i + 1).toString());
+      subUI.setVisibility(MWGameUI.ESlateVisibility.Hidden);
+    }
+  }
+};
+
 // JavaScripts/UIRoot.ts
 var UIRoot_exports = {};
 __export(UIRoot_exports, {
   default: () => UIRoot
 });
-var import_odin25 = __toESM(require_dist());
-var UIRoot = class extends import_odin25.UI {
+var import_odin26 = __toESM(require_dist());
+var UIRoot = class extends import_odin26.UI {
 };
 UIRoot = __decorateClass([
   MWGameUI.MWUIMono
@@ -6149,7 +6341,7 @@ var NPC_exports2 = {};
 __export(NPC_exports2, {
   default: () => NPC2
 });
-var import_odin26 = __toESM(require_dist());
+var import_odin27 = __toESM(require_dist());
 var NPC2 = class extends MWCore.MWScript {
   curState;
   npcModule;
@@ -6157,7 +6349,7 @@ var NPC2 = class extends MWCore.MWScript {
   onStart() {
     console.log("npc init");
     if (GamePlay.isServer()) {
-      this.npcModule = import_odin26.ModuleManager.instance.getModule(NpcModuleS);
+      this.npcModule = import_odin27.ModuleManager.instance.getModule(NpcModuleS);
       this.npcModule.net_AddNpc(this.gameObject);
       this.curState = new PatrolState(this.gameObject);
       this.bUseUpdate = true;
@@ -6206,7 +6398,7 @@ var Rifle_exports = {};
 __export(Rifle_exports, {
   default: () => Rifle
 });
-var import_odin27 = __toESM(require_dist());
+var import_odin28 = __toESM(require_dist());
 var Rifle = class extends MWCore.MWScript {
   initPos;
   initRot;
@@ -6222,7 +6414,7 @@ var Rifle = class extends MWCore.MWScript {
         if (GamePlay.isClient() && !this.isEquiped) {
           this.isEquiped = true;
           let fireEffect = this.gameObject.getChildByName("Fire");
-          import_odin27.ModuleManager.instance.getModule(WeaponModuleC).pickWeapon(gameObject.player, this.gameObject, fireEffect, boxTrigger);
+          import_odin28.ModuleManager.instance.getModule(WeaponModuleC).pickWeapon(gameObject.player, this.gameObject, fireEffect, boxTrigger);
         }
       }
     });
@@ -6289,6 +6481,7 @@ var MWModuleMap3 = {
   "JavaScripts/PlayerData": PlayerData_exports,
   "JavaScripts/PlayerModuleC": PlayerModuleC_exports,
   "JavaScripts/PlayerModuleS": PlayerModuleS_exports,
+  "JavaScripts/ScoreBoardUI": ScoreBoardUI_exports,
   "JavaScripts/StartGameUI": StartGameUI_exports,
   "JavaScripts/UIRoot": UIRoot_exports,
   "JavaScripts/UITemplate": UITemplate_exports,

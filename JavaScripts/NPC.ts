@@ -1,9 +1,9 @@
 ﻿/*
  * @Author: Tianyi
  * @Date: 2022-08-18 20:13:27
- * @LastEditTime: 2022-08-19 10:14:02
+ * @LastEditTime: 2022-08-19 15:22:59
  * @FilePath: \WYW_0419_Oasis\JavaScripts\NPC.ts
- * @Description: NPC的Mono类，创建状态机，并根据服务器信息切换状态
+ * @Description: NPC的Mono类，创建状态机，并根据服务端信息切换状态
  */
 import { EffectManager, ModuleManager } from "odin";
 import { BaseState } from "./FiniteStateMachine/BaseState";

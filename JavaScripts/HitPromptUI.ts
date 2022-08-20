@@ -1,4 +1,13 @@
-﻿import { UI_GameUI, UI_HitPromptUI } from "./UITemplate";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-16 10:08:17
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 15:21:58
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\HitPromptUI.ts
+ * @Description: 受击提示UI，由受击提示模块客户端负责更新
+ * 
+ */
+import { UI_GameUI, UI_HitPromptUI } from "./UITemplate";
 
 export default class HitPromptUI extends UI_HitPromptUI {
 	//用于存放所有的受击提示图标

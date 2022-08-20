@@ -1,4 +1,13 @@
-﻿import { ModuleManager } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-17 20:03:16
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-19 16:11:02
+ * @FilePath: \WYW_0419_Oasis\Prefabs\Weapon\Script\Rifle.ts
+ * @Description: 武器mono类，接收游戏控制模块的消息，当重置游戏时，将武器回归原位，有人退出时，将退出玩家的武器回归原位
+ * 
+ */
+import { ModuleManager } from "odin";
 import { WeaponModuleC } from "../../../JavaScripts/WeaponModuleC";
 
 @MWCore.MWClass

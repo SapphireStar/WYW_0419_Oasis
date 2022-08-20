@@ -2,10 +2,10 @@
  * @Author: Tianyi
  * @Date: 2022-08-15 14:57:43
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-19 10:51:28
+ * @LastEditTime: 2022-08-19 19:09:22
  * @FilePath: \WYW_0419_Oasis\JavaScripts\WeaponModuleC.ts
  * @Description: 客户端武器模块，负责通知服务器为角色装备武器和播放特效，游戏结束后负责将武器归位。当接收来自UI的开枪请求时，
- * 进行射线检测，并将击中结果发送给服务端
+ * 进行射线检测，并将击中结果发送给服务端。
  * 通过事件方式将击中玩家的消息发送给服务端，供受击提示模块计算
  * 
  */

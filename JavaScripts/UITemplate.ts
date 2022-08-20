@@ -52,6 +52,16 @@ export class UI_GameUI extends ViewBase {
 	public mHealthBar: MWGameUI.MWUIProgressbar;
 	public mCountDown: MWGameUI.MWUITextblock;
 	public mProgressBar: MWGameUI.MWUIProgressbar;
+	public mScoreBoard: MWGameUI.MWUICanvas;
+	public mFieldName: MWGameUI.MWUICanvas;
+	public mSelfList: MWGameUI.MWUICanvas;
+	public mRank1: MWGameUI.MWUICanvas;
+	public mRank2: MWGameUI.MWUICanvas;
+	public mRank3: MWGameUI.MWUICanvas;
+	public mRank4: MWGameUI.MWUICanvas;
+	public mRank5: MWGameUI.MWUICanvas;
+	public mRank6: MWGameUI.MWUICanvas;
+	public mShowScoreBoard: MWGameUI.MWUIButton;
 
     constructor() {
         super("GameUI");
@@ -69,6 +79,16 @@ export class UI_GameUI extends ViewBase {
 		this.mHealthBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mHealthBar");
 		this.mCountDown = this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mCountDown");
 		this.mProgressBar = this.findChildByPath(MWGameUI.MWUIProgressbar, "Canvas/mProgressBar");
+		this.mScoreBoard = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard");
+		this.mFieldName = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mFieldName");
+		this.mSelfList = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList");
+		this.mRank1 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank1");
+		this.mRank2 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank2");
+		this.mRank3 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank3");
+		this.mRank4 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank4");
+		this.mRank5 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank5");
+		this.mRank6 = this.findChildByPath(MWGameUI.MWUICanvas, "Canvas/mScoreBoard/mSelfList/mRank6");
+		this.mShowScoreBoard = this.findChildByPath(MWGameUI.MWUIButton, "Canvas/mShowScoreBoard");
 		this.mJumpButton.onClicked().add(() => {
 			Events.dispatchLocal("PlayButtonClick", "mJumpButton");
 		});
@@ -85,7 +105,32 @@ export class UI_GameUI extends ViewBase {
 		LanUtil.setUILanguage(this.mInvisibleCountDown);
 		LanUtil.setUILanguage(this.mCoinCount);
 		LanUtil.setUILanguage(this.mCountDown);
+		this.mShowScoreBoard.onClicked().add(() => {
+			Events.dispatchLocal("PlayButtonClick", "mShowScoreBoard");
+		});
+		LanUtil.setUILanguage(this.mShowScoreBoard);
 		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/CollectText"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field1_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field2_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mFieldName/Field5_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank1/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank2/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank3/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank4/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank5/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "Canvas/mScoreBoard/mSelfList/mRank6/Gold"));
 
     }
 }
@@ -206,12 +251,49 @@ export class UI_Main extends ViewBase {
 
     }
 }
-export class UI_NewUI extends ViewBase {
+export class UI_ScoreBoardUI extends ViewBase {
+	public mFieldName: MWGameUI.MWUICanvas;
+	public mSelfList: MWGameUI.MWUICanvas;
+	public mRank1: MWGameUI.MWUICanvas;
+	public mRank2: MWGameUI.MWUICanvas;
+	public mRank3: MWGameUI.MWUICanvas;
+	public mRank4: MWGameUI.MWUICanvas;
+	public mRank5: MWGameUI.MWUICanvas;
+	public mRank6: MWGameUI.MWUICanvas;
 
     constructor() {
-        super("NewUI");
+        super("ScoreBoardUI");
     }
     public buildSelf(): void {
+		this.mFieldName = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mFieldName");
+		this.mSelfList = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList");
+		this.mRank1 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank1");
+		this.mRank2 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank2");
+		this.mRank3 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank3");
+		this.mRank4 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank4");
+		this.mRank5 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank5");
+		this.mRank6 = this.findChildByPath(MWGameUI.MWUICanvas, "ScoreBoard/mSelfList/mRank6");
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field1_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field2_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mFieldName/Field5_txt"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank1/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank2/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank3/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank4/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank5/Gold"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Rank"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Name"));
+		LanUtil.setUILanguage(this.findChildByPath(MWGameUI.MWUITextblock, "ScoreBoard/mSelfList/mRank6/Gold"));
 
     }
 }
