@@ -2,7 +2,7 @@
  * @Author: Tianyi
  * @Date: 2022-08-16 19:35:06
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-20 16:06:02
+ * @LastEditTime: 2022-08-20 19:28:00
  * @FilePath: \WYW_0419_Oasis\JavaScripts\GameControl.ts
  * @Description: GameContro mono类，负责游戏的倒计时功能，倒计时结束发送游戏结束消息。同时负责给新玩家分配初生点
  * 
@@ -38,40 +38,36 @@ export default class GameControl extends MWCore.MWScript {
 				}
 			});
 
-			//让新进入的玩家处于不同的初生点
-			console.log("check point");
-			let spawnPoints:MWCore.GameObject[];
-			let spawnPointMap:Map<MWCore.GameObject, GamePlay.Player>;
-			setTimeout(() => {
-				spawnPoints = MWCore.GameObject.getGameObjectsByName("StartPoint");
-				spawnPointMap = new Map<MWCore.GameObject, GamePlay.Player>();
-			}, 200);
-			Events.addPlayerJoinedListener((player: GamePlay.Player) => {
-				setTimeout(() => {
-					for (let i = 0; i < spawnPoints.length; i++) {
-						if (!spawnPointMap.has(spawnPoints[i])) {
-							spawnPointMap.set(spawnPoints[i], player);
-							DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
-							player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
-							break;
-						}
-						else if (spawnPointMap.get(spawnPoints[i]) == null) {
-							spawnPointMap.set(spawnPoints[i], player);
-							DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
-							player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
-							break;
-						}
-					}
-				}, 500);
-			});
+			//让新进入的玩家处于不同的初生点,目前逻辑有bug
+			// console.log("check point");
+			// let spawnPoints: MWCore.GameObject[];
+			// let spawnPointMap: Map<MWCore.GameObject, GamePlay.Player>;
+			// spawnPoints = MWCore.GameObject.getGameObjectsByName("StartPoint");
+			// spawnPointMap = new Map<MWCore.GameObject, GamePlay.Player>();
+			// Events.addPlayerJoinedListener((player: GamePlay.Player) => {
+			// 	for (let i = 0; i < spawnPoints.length; i++) {
+			// 		if (!spawnPointMap.has(spawnPoints[i])) {
+			// 			spawnPointMap.set(spawnPoints[i], player);
+			// 			DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
+			// 			player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
+			// 			break;
+			// 		}
+			// 		else if (spawnPointMap.get(spawnPoints[i]) == null) {
+			// 			spawnPointMap.set(spawnPoints[i], player);
+			// 			DataCenterS.instance.getModuleData(player, PlayerData).setSpawnPoint(spawnPoints[i].location);
+			// 			player.character.setLocationAndRotation(spawnPoints[i].location, player.character.rotation);
+			// 			break;
+			// 		}
+			// 	}
+			// });
 
-			Events.addPlayerLeftListener((player) => {
-				spawnPoints.forEach((spawnpoint) => {
-					if (spawnPointMap.get(spawnpoint) == player) {
-						spawnPointMap.set(spawnpoint, null);
-					}
-				});
-			});
+			// Events.addPlayerLeftListener((player) => {
+			// 	spawnPoints.forEach((spawnpoint) => {
+			// 		if (spawnPointMap.get(spawnpoint) == player) {
+			// 			spawnPointMap.set(spawnpoint, null);
+			// 		}
+			// 	});
+			// });
 		}
 	}
 

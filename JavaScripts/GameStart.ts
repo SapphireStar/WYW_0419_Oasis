@@ -1,4 +1,13 @@
-﻿import { ModuleManager, OdinGame, UI } from "odin";
+﻿/*
+ * @Author: Tianyi
+ * @Date: 2022-08-15 14:57:43
+ * @LastEditors: Tianyi
+ * @LastEditTime: 2022-08-20 18:28:40
+ * @FilePath: \WYW_0419_Oasis\JavaScripts\GameStart.ts
+ * @Description: 
+ * 
+ */
+import { ModuleManager, OdinGame, UI } from "odin";
 import { CoinData } from "./CoinData";
 import { CoinModuleC } from "./CoinModuleC";
 import { CoinModuleS } from "./CoinModuleS";
@@ -39,7 +48,7 @@ export default class GameStart extends OdinGame {
 		ModuleManager.instance.register(NpcModuleS,NpcModuleC,null);
 		ModuleManager.instance.register(WeaponModuleS,WeaponModuleC,null);
 		if(GamePlay.isClient()){
-			
+			UI.instance.showPanel(StartGameUI);
 		}
 	}
 

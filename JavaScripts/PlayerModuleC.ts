@@ -2,7 +2,7 @@
  * @Author: Tianyi
  * @Date: 2022-08-15 16:29:54
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-20 15:54:51
+ * @LastEditTime: 2022-08-20 19:28:31
  * @FilePath: \WYW_0419_Oasis\JavaScripts\PlayerModuleC.ts
  * @Description: 客户端玩家模块负责检查玩家是否出界，判断玩家的死亡情况，并且负责技能CD和死亡的倒计时逻辑
  * 
@@ -30,7 +30,7 @@ export class PlayerModuleC extends ModuleC<PlayerModuleS, PlayerData> {
         this.server.net_SetName();
 
         //让服务器记录初始初生点
-        //this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
+        this.server.net_SetSpawnPoint(this.currentPlayer.character.location);
     }
 
     public override onUpdate(dt: number): void {
