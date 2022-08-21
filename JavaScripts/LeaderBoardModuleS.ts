@@ -2,7 +2,7 @@
  * @Author: Tianyi
  * @Date: 2022-08-17 16:27:41
  * @LastEditors: Tianyi
- * @LastEditTime: 2022-08-20 10:52:46
+ * @LastEditTime: 2022-08-21 09:30:06
  * @FilePath: \WYW_0419_Oasis\JavaScripts\LeaderBoardModuleS.ts
  * @Description: 排行榜模块服务端，接收来自客户端的数据请求，获取所有玩家数据后进行排序，再发送给客户端
  * 
@@ -16,7 +16,8 @@ import { PlayerData } from "./PlayerData";
 
 
 export class LeaderBoardModuleS extends ModuleS<BoardModuleC,null> {
-
+	
+	//返回排行榜数据
 	public async net_GetLeaderBoardData(){
 		let players = GamePlay.getAllPlayers();
 		let playerInfos = [];
@@ -46,6 +47,7 @@ export class LeaderBoardModuleS extends ModuleS<BoardModuleC,null> {
 		}
 	}
 
+	//返回积分榜数据
 	public async net_GetScoreBoardData(){
 		let players = GamePlay.getAllPlayers();
 		let playerInfos = [];
